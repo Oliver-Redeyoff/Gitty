@@ -13,7 +13,7 @@
 First, clone the repo via git and install dependencies:
 
 ```bash
-git clone 
+git clone https://github.com/Oliver-Redeyoff/Gitty.git
 cd Gitty
 yarn
 ```
