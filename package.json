@@ -256,6 +256,7 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.5",
+    "simple-git": "^2.34.2",
     "source-map-support": "^0.5.19"
   },
   "devEngines": {

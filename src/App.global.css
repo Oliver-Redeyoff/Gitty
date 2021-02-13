@@ -13,46 +13,29 @@ body {
     #7a2c9e 129.35%
   );
   font-family: sans-serif;
-  overflow-y: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding-top: 80px;
 }
 
-button {
-  background-color: white;
-  padding: 10px 20px;
-  margin: 10px;
-  border-radius: 10px;
-  border: none;
-  appearance: none;
-  font-size: 1.3rem;
-  box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
-    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
-  transition: transform ease-in 0.1s;
+.frame-drag-area {
+  -webkit-app-region: drag;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 35px;
 }
 
-button:hover {
-  transform: scale(1.05);
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  padding-top: 40px;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-li {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  opacity: 1;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.Hello {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+.header h1 {
+  margin: 0px;
 }

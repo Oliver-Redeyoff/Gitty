@@ -1,51 +1,46 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import simpleGit, {SimpleGit} from 'simple-git';
+
 import icon from '../assets/icon.svg';
 import './App.global.css';
 
-const Hello = () => {
-  return (
+const git: SimpleGit = simpleGit('/Users/oliver/Documents/Programming/githubClones/Gitty', { binary: 'git' });
+
+type myState = {
+  current: string
+}
+
+class Hello extends React.Component<{}, myState> {
+
+  componentWillMount() {
+    this.setState({current: ''})
+    git.status()
+      .then((res:any) => {this.setState({current: res.current})});
+  }
+
+  render() {
+    return(
     <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
+      <div className="header">
+        <h1>Gitty</h1>
       </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
+      <p>Current branch : {this.state.current}</p>
     </div>
-  );
+    );
+  }
 };
 
 export default function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/" component={Hello} />
-      </Switch>
-    </Router>
+    <div>
+      <div className="frame-drag-area"></div>
+      <Router>
+        <Switch>
+          <Route path="/" component={Hello} />
+        </Switch>
+      </Router>
+    </div>
   );
 }
