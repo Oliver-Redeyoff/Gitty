@@ -3,10 +3,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import simpleGit, {SimpleGit} from 'simple-git';
 
-import icon from '../assets/icon.svg';
 import './App.global.css';
 
-const git: SimpleGit = simpleGit('/Users/oliver/Documents/Programming/githubClones/Gitty', { binary: 'git' });
+const git: SimpleGit = simpleGit('/Users/oliver/Documents/Programming/githubClones/compareTheNews', { binary: 'git' });
 
 type myState = {
   current: string
@@ -18,6 +17,10 @@ class Hello extends React.Component<{}, myState> {
     this.setState({current: ''})
     git.status()
       .then((res:any) => {this.setState({current: res.current})});
+    
+    // get all commits
+    git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P'}})
+      .then((res:any) => {console.log(res)});
   }
 
   render() {
