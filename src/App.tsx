@@ -28,7 +28,7 @@ class Hello extends React.Component<{}, myState> {
       .then((res:any) => {this.setState({current: res.current})});
     
     // get all commits
-    git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P'}})
+    git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
       .then((res:any) => {console.log(res); this.setState({commits: res.all})});
     
   }
