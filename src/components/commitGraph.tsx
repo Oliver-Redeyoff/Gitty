@@ -25,7 +25,7 @@ const commitGraph = (props: CanvasProps) => {
     const canvas: HTMLCanvasElement = canvasRef.current!;
     const ctx = canvas.getContext('2d')!;
 
-    drawGraph(ctx);
+    animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
 
   }, [])
 
@@ -38,7 +38,7 @@ const commitGraph = (props: CanvasProps) => {
 
     cancelAnimationFrame(animationRequestFrameId);
 
-    drawGraph(ctx);
+    animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
   }, [props.width, props.height, props.commits])
 
 
@@ -110,7 +110,16 @@ const commitGraph = (props: CanvasProps) => {
 
 
   function drawCommit(ctx: CanvasRenderingContext2D, x: number, y: number) {
-    ctx.fillRect(x*grid_tile_width, y*grid_tile_height, grid_tile_width-20, grid_tile_height-20);
+    // draw circle to represent commit
+    ctx.beginPath();
+    ctx.arc(x*grid_tile_width + grid_tile_width/2, y*grid_tile_height + grid_tile_height/2, 15, 0, 2 * Math.PI);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    // draw grid
+    ctx.rect(x*grid_tile_width, y*grid_tile_height, grid_tile_width, grid_tile_height);
+    ctx.stroke()
   }
 
 
