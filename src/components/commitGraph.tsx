@@ -43,29 +43,27 @@ const commitGraph = (props: CanvasProps) => {
 
 
   function drawGraph(this: any, ctx: CanvasRenderingContext2D) {
-    console.log('unprocessed commits :')
-    console.log(props.commits)
+    // console.log('unprocessed commits :')
+    // console.log(props.commits)
 
     let commits: any = processCommits(props.commits)
 
-    console.log('processed commits :')
-    console.log(leaf_nodes)
+    // console.log('processed commits :')
+    // console.log(leaf_nodes)
 
     // set first commit
-    var commitHash = leaf_nodes[0]
-    var commitPos = {x: 1, y: 1}
+    var firstCommitHash = leaf_nodes[0]
 
     // draw commits recursively
-    recursiveDrawCommit(commitHash, commits, ctx, 1, 1);
+    drawCommitsRec(firstCommitHash, commits, ctx, 1, 1);
 
     //animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
 
   }
 
-  function recursiveDrawCommit(currentCommitHash: string, commits:any, ctx: CanvasRenderingContext2D, x: number, y: number) {
-    console.log(currentCommitHash)
-    if(commits[currentCommitHash]) {
-      
+  function drawCommitsRec(currentCommitHash: string, commits:any, ctx: CanvasRenderingContext2D, x: number, y: number) {
+    
+    if(commits[currentCommitHash]) {  
       // draw current commit
       drawCommit(ctx, x, y);
       // mark commit as drawn so that we don't draw commits twice
@@ -85,18 +83,19 @@ const commitGraph = (props: CanvasProps) => {
             return;
           }
         }
-        recursiveDrawCommit(parentCommits[0], commits, ctx, x, y+1);
+        drawCommitsRec(parentCommits[0], commits, ctx, x, y+1);
       }
       // if there are multiple parents, draw from left to right
       else if(parentCommits.length >= 2) {
         var branchCount = 0;
         parentCommits.forEach((parentCommit: any) => {
+          // first branch stays in the same x
           if(branchCount == 0) {
-            recursiveDrawCommit(parentCommit, commits, ctx, x, y+1);
+            drawCommitsRec(parentCommit, commits, ctx, x, y+1);
           } else {
-            // need to work out by how much to offset y as the previous branch might have multiple ancestor branches
-            var xOffset = getAncestorBranchesCount(currentCommitHash, commits);
-            recursiveDrawCommit(parentCommit, commits, ctx, x+xOffset, y+1);
+            // need to work out by how much to offset x as the previous branch might have multiple ancestor branches
+            var xOffset = getAncestorBranchesCountRec(currentCommitHash, commits);
+            drawCommitsRec(parentCommit, commits, ctx, x+xOffset, y+1);
           }
           branchCount += 1;
         });
@@ -104,8 +103,34 @@ const commitGraph = (props: CanvasProps) => {
     }
   }
 
-  function getAncestorBranchesCount(currentCommitHash: string, commits: any) {
-    return 1;
+  function getAncestorBranchesCountRec(currentCommitHash: string, commits: any) {
+
+    let parentCommits = commits[currentCommitHash].parentCommits;
+    if(parentCommits.length == 0) {
+      return 0;
+    }
+    else if(parentCommits.length == 1) {
+      // if we have reached the start of a branch stop
+      if(commits[parentCommits[0]].childCommits.length >= 2) {
+        return 0;
+      } else {
+        return getAncestorBranchesCountRec(parentCommits[0], commits);
+      }
+    }
+    else if(parentCommits.length >= 2) {
+      let parentCount = 0;
+      let branchCount = 0;
+      parentCommits.forEach(parentCommit => {
+        if(parentCount == 0) {
+          parentCount += 1
+          branchCount += getAncestorBranchesCountRec(parentCommit, commits);
+        } else {
+          parentCount += 1
+          branchCount += 1 + getAncestorBranchesCountRec(parentCommit, commits);
+        }
+      });
+      return branchCount;
+    }
   }
 
 
