@@ -20,8 +20,8 @@ class Hello extends React.Component<{}, myState> {
 
   componentWillMount() {
 
-    this.setState({commits: [], current: '', commitGraphWidth: window.innerWidth, commitGraphHeight: window.innerHeight-200})
-    window.addEventListener('resize', () => {this.setState({commitGraphWidth: window.innerWidth, commitGraphHeight: window.innerHeight-200})})
+    this.setState({commits: [], current: '', commitGraphWidth: window.innerWidth, commitGraphHeight: window.innerHeight-145})
+    window.addEventListener('resize', () => {this.setState({commitGraphWidth: window.innerWidth, commitGraphHeight: window.innerHeight-145})})
 
     // get current branch
     git.status()
@@ -39,7 +39,6 @@ class Hello extends React.Component<{}, myState> {
       <div className="header">
         <h1>Gitty</h1>
       </div>
-      <p>Current branch : {this.state.current}</p>
       <CommitGraph commits={this.state.commits} width={this.state.commitGraphWidth} height={this.state.commitGraphHeight}></CommitGraph>
     </div>
     );

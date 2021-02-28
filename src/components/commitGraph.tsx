@@ -13,6 +13,8 @@ const commitGraph = (props: CanvasProps) => {
   // reference for the canvas dom element
   const canvasRef = useRef(null);
   // canvas is a grid divided into tiles
+  var grid = []
+  //
   const grid_tile_width: number = 50;
   const grid_tile_height: number = 50;
   // list of top level elements
@@ -43,93 +45,100 @@ const commitGraph = (props: CanvasProps) => {
 
 
   function drawGraph(this: any, ctx: CanvasRenderingContext2D) {
-    // console.log('unprocessed commits :')
-    // console.log(props.commits)
 
+    // get commits from props
     let commits: any = processCommits(props.commits)
-
-    // console.log('processed commits :')
-    // console.log(leaf_nodes)
 
     // set first commit
     var firstCommitHash = leaf_nodes[0]
 
-    // draw commits recursively
-    drawCommitsRec(firstCommitHash, commits, ctx, 1, 1);
+    // add commits recursively to grid
+    populateGridRec(firstCommitHash, commits, ctx, 1, 1);
+
+    // now draw commits that are within bounds of canvas
 
     //animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
-
   }
 
-  function drawCommitsRec(currentCommitHash: string, commits:any, ctx: CanvasRenderingContext2D, x: number, y: number) {
+  function populateGridRec(currentCommitHash: string, commits:any, ctx: CanvasRenderingContext2D, x: number, y: number) {
     
     if(commits[currentCommitHash]) {  
       // draw current commit
-      drawCommit(ctx, x, y);
-      // mark commit as drawn so that we don't draw commits twice
-      commits[currentCommitHash].drawn = true;
+      //drawCommit(ctx, x, y);
       
+      // add commit to grid if it hasn't been visited yet
+      if(commits[currentCommitHash].visited == false) {
+        addToGrid(x, y);
+        // mark commit as visited so that we don't draw commits twice
+        commits[currentCommitHash].visited = true;
+      }
+      
+      // get parent commits
       let parentCommits = commits[currentCommitHash].parentCommits;
+
 
       // if no more parents, stop
       if(parentCommits.length == 0) {
         return;
       }
+
       // if one parent, draw next commit with an incremented x
       else if(parentCommits.length == 1) {
-        // stop if the next commit has already been drawn
+        // stop if the next commit has already been visited
         if(commits[parentCommits[0]]) {
-          if(commits[parentCommits[0]].drawn == true){
+          if(commits[parentCommits[0]].visited == true){
             return;
           }
         }
-        drawCommitsRec(parentCommits[0], commits, ctx, x, y+1);
+        populateGridRec(parentCommits[0], commits, ctx, x, y+1);
       }
+
       // if there are multiple parents, draw from left to right
       else if(parentCommits.length >= 2) {
-        var branchCount = 0;
+        let branchCount = 0;
+        let previousParent = '';
         parentCommits.forEach((parentCommit: any) => {
           // first branch stays in the same x
           if(branchCount == 0) {
-            drawCommitsRec(parentCommit, commits, ctx, x, y+1);
+            populateGridRec(parentCommit, commits, ctx, x, y+1);
           } else {
-            // need to work out by how much to offset x as the previous branch might have multiple ancestor branches
-            var xOffset = getAncestorBranchesCountRec(currentCommitHash, commits);
-            drawCommitsRec(parentCommit, commits, ctx, x+xOffset, y+1);
+            // need to find what x we can start at
+            let nextX = findFreeX(y);
+            
+            populateGridRec(parentCommit, commits, ctx, nextX, y+1);
           }
           branchCount += 1;
+          previousParent = parentCommit;
         });
       }
     }
   }
 
-  function getAncestorBranchesCountRec(currentCommitHash: string, commits: any) {
-
-    let parentCommits = commits[currentCommitHash].parentCommits;
-    if(parentCommits.length == 0) {
-      return 0;
-    }
-    else if(parentCommits.length == 1) {
-      // if we have reached the start of a branch stop
-      if(commits[parentCommits[0]].childCommits.length >= 2) {
-        return 0;
-      } else {
-        return getAncestorBranchesCountRec(parentCommits[0], commits);
+  function addToGrid(x, y) {
+    // if this y doesn't exist in the grid yet, add all missing rows to grid
+    if(y > grid.length-1) {
+      let limit = grid.length;
+      for(var i=0 ; i<=(y-limit) ; i++) {
+        grid.push([])
       }
     }
-    else if(parentCommits.length >= 2) {
-      let parentCount = 0;
-      let branchCount = 0;
-      parentCommits.forEach(parentCommit => {
-        if(parentCount == 0) {
-          parentCount += 1
-          branchCount += getAncestorBranchesCountRec(parentCommit, commits);
-        } else {
-          parentCount += 1
-          branchCount += 1 + getAncestorBranchesCountRec(parentCommit, commits);
-        }
-      });
-      return branchCount;
+
+    console.log(grid)
+    // try and add commit to grid
+    if(grid[y].indexOf(x) == -1) {
+      grid[y].push(x)
+    } else {
+      throw 'Grid position is already taken'
+    }
+
+  }
+
+  function findFreeX(y) {
+    // if this row doesn't exist yet, then take the first column
+    if(y > grid.length-1) {
+      return 0;
+    } else {
+      return Math.max(grid[y])+1
     }
   }
 
@@ -172,7 +181,7 @@ const commitGraph = (props: CanvasProps) => {
         authorDate: commit.authorDate,
         parentCommits: parents,
         childCommits: [],
-        drawn: false
+        visited: false
       }
 
     });
