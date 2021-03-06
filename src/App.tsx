@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import CommitGraph from './components/commitGraph';
@@ -20,8 +20,8 @@ class Hello extends React.Component<{}, myState> {
 
   componentWillMount() {
 
-    this.setState({commits: [], current: '', commitGraphWidth: window.innerWidth, commitGraphHeight: window.innerHeight-145})
-    window.addEventListener('resize', () => {this.setState({commitGraphWidth: window.innerWidth, commitGraphHeight: window.innerHeight-145})})
+    this.setState({commits: [], current: '', commitGraphWidth: window.innerWidth-40, commitGraphHeight: window.innerHeight-140})
+    window.addEventListener('resize', () => {this.setState({commitGraphWidth: window.innerWidth-40, commitGraphHeight: window.innerHeight-140})})
 
     // get current branch
     git.status()
@@ -39,7 +39,9 @@ class Hello extends React.Component<{}, myState> {
       <div className="header">
         <h1>Gitty</h1>
       </div>
-      <CommitGraph commits={this.state.commits} width={this.state.commitGraphWidth} height={this.state.commitGraphHeight}></CommitGraph>
+      <div className="commitGraphContainer">
+        <CommitGraph commits={this.state.commits} width={this.state.commitGraphWidth} height={this.state.commitGraphHeight}></CommitGraph>
+      </div>
     </div>
     );
   }
