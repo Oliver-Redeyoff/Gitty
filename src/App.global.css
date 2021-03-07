@@ -63,10 +63,35 @@ body {
 }
 
 .sidebar {
+  position: relative;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
+}
+
+.sidebar-slot {
+  position: relative;
+  width: 100%;
+  height: 10%;
+  box-sizing: border-box;
+  background-color: transparent;
+  transition: all 0.4s;
+}
+.sidebar-slot:last-of-type {
+  border-bottom: none;
+}
+.sidebar-slot:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-slot img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 

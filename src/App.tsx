@@ -67,6 +67,16 @@ const Main = () => {
 
         <div className="sidebarContainer">
           <div className="sidebar">
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
+            <div className="sidebar-slot"><img src="https://img.icons8.com/material-outlined/24/000000/merge-git.png"/></div>
           </div>
         </div>
 
