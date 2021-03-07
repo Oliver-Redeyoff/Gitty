@@ -1,8 +1,7 @@
-import { timeEnd } from 'console';
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface CanvasProps {
-  commits: [{authorDate: string, authorName: string, commitHash: string, parentHashes: any, refNames: any}];
+  commits: any;
   width: number;
   height: number;
 }
@@ -349,8 +348,8 @@ const commitGraph = (props: CanvasProps) => {
     ctx.beginPath();
 
     // draw grid
-    // ctx.rect(real_x, real_y, tileSize.width, tileSize.height);
-    // ctx.stroke()
+    ctx.rect(real_x, real_y, tileSize.width, tileSize.height);
+    ctx.stroke()
   }
 
   
@@ -358,7 +357,7 @@ const commitGraph = (props: CanvasProps) => {
   // DOM render //
   ////////////////
   return (
-    <div style={{borderRadius: '10px', backgroundColor: 'rgba(255, 255, 255, 0.08)'}}>
+    <div>
       <canvas ref={canvasRef} width={props.width} height={props.height}/>
     </div>
   );

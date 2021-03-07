@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import CommitGraph from './components/commitGraph';
@@ -9,42 +9,70 @@ import './App.global.css';
 
 const git: SimpleGit = simpleGit('/Users/oliver/Documents/Programming/githubClones/gitTest', { binary: 'git' });
 
-type myState = {
-  commits: any,
-  current: string,
-  commitGraphWidth: number,
-  commitGraphHeight: number
-}
+const Main = () => {
 
-class Hello extends React.Component<{}, myState> {
+  // commit graph container ref
+  const canvasContainerRef = useRef(null);
+  const [commits, setCommits] = useState([]);
+  const [commitGraphContainerSize, setCommitGraphContainerSize] = useState({width: 0, height: 0});
 
-  componentWillMount() {
+  useEffect(() => {
 
-    this.setState({commits: [], current: '', commitGraphWidth: window.innerWidth-40, commitGraphHeight: window.innerHeight-140})
-    window.addEventListener('resize', () => {this.setState({commitGraphWidth: window.innerWidth-40, commitGraphHeight: window.innerHeight-140})})
+    setCommitGraphContainerSize((currentSize) => {
+      let newCommitGraphContainerSize = {...currentSize};
+      newCommitGraphContainerSize.width = canvasContainerRef.current.innerWidth;
+      newCommitGraphContainerSize.height = canvasContainerRef.current.innerHeight;
+      console.log(newCommitGraphContainerSize)
+      return newCommitGraphContainerSize;
+    })
+
+    window.addEventListener('resize', () => {
+      setCommitGraphContainerSize((currentSize) => {
+        let newCommitGraphContainerSize = {...currentSize};
+        newCommitGraphContainerSize.width = canvasContainerRef.current.clientWidth;
+        newCommitGraphContainerSize.height = canvasContainerRef.current.clientHeight;
+        console.log(newCommitGraphContainerSize)
+        return newCommitGraphContainerSize;
+      })
+    })
 
     // get current branch
-    git.status()
-      .then((res:any) => {this.setState({current: res.current})});
+    // git.status()
+    //   .then((res:any) => {this.setState({current: res.current})});
     
     // get all commits
     git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
-      .then((res:any) => {console.log(res); this.setState({commits: res.all})});
+      .then((res:any) => {console.log(res); setCommits(res.all)});
     
-  }
+  }, []);
 
-  render() {
-    return(
+  useEffect(() => {
+    console.log(canvasContainerRef)
+    setCommitGraphContainerSize((currentSize) => {
+      let newCommitGraphContainerSize = {...currentSize};
+      newCommitGraphContainerSize.width = canvasContainerRef.current.clientWidth;
+      newCommitGraphContainerSize.height = canvasContainerRef.current.clientHeight;
+      console.log(newCommitGraphContainerSize)
+      return newCommitGraphContainerSize;
+    })
+  }, [commits, canvasContainerRef])
+
+
+  return(
     <div className="all">
-      <div className="header">
-        <h1>Gitty</h1>
+      <div className="allInner">
+        <div className="header">
+          <h1>Gitty</h1>
+        </div>
+        <div ref={canvasContainerRef} className="commitGraphContainer">
+          <CommitGraph commits={commits} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>
+        </div>
       </div>
-      <div className="commitGraphContainer">
-        <CommitGraph commits={this.state.commits} width={this.state.commitGraphWidth} height={this.state.commitGraphHeight}></CommitGraph>
+      <div className="options">
       </div>
     </div>
-    );
-  }
+  );
+  
 };
 
 export default function App() {
@@ -53,7 +81,7 @@ export default function App() {
       <div className="frame-drag-area"></div>
       <Router>
         <Switch>
-          <Route path="/" component={Hello} />
+          <Route path="/" component={Main} />
         </Switch>
       </Router>
     </div>
