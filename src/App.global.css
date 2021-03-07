@@ -1,7 +1,8 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
+ :root {
+   --header-height: 100px;
+   --sidebar-width: 100px;
+ }
+ 
 body {
   position: relative;
   color: white;
@@ -17,20 +18,6 @@ body {
   overflow: hidden;
 }
 
-.all{
-  position: relative;
-  height: 100vh;
-  width: 100vw;
-  box-sizing: border-box;
-  padding: 120px 20px 20px 100px;
-}
-
-.allInner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
 .frame-drag-area {
   -webkit-app-region: drag;
   position: fixed;
@@ -40,37 +27,63 @@ body {
   height: 35px;
 }
 
+
+/* HEADER */
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: block;
+  margin-top: 0;
+  margin-left: 0;
   width: 100%;
-  height: 100px;
+  height: var(--header-height);
   box-sizing: border-box;
   padding: 20px;
   padding-top: 40px;
   background-color: rgba(0, 0, 0, 0.1);
 }
-
 .header h1 {
   margin: 0px;
 }
 
+
+/* ALL BODY */
+.all{
+  height: calc(100vh - 100px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* SIDEBAR */
+.sidebarContainer {
+  display: inline-block;
+  height: 100%;
+  width: var(--sidebar-width);
+  box-sizing: border-box;
+  padding: 20px 10px 20px 20px;
+}
+
+.sidebar {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+
+/* CONTENT */
+.contentContainer {
+  display: inline-block;
+  height: 100%;
+  width: calc(100% - var(--sidebar-width));
+  box-sizing: border-box;
+  vertical-align: top;
+  padding: 20px 20px 20px 10px;
+}
+
 .commitGraphContainer {
-  position: absolute;
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   overflow: hidden;
-}
-
-.options {
-  position: absolute;
-  left: 10px;
-  top: 120px;
-  width: 80px;
-  height: calc(100% - 140px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
 }

@@ -59,18 +59,24 @@ const Main = () => {
 
 
   return(
-    <div className="all">
-      <div className="allInner">
-        <div className="header">
-          <h1>Gitty</h1>
+    <>
+      <div className="header">
+        <h1>Gitty</h1>
+      </div>
+      <div className="all">
+
+        <div className="sidebarContainer">
+          <div className="sidebar">
+          </div>
         </div>
-        <div ref={canvasContainerRef} className="commitGraphContainer">
-          <CommitGraph commits={commits} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>
+
+        <div className="contentContainer">
+          <div ref={canvasContainerRef} className="commitGraphContainer">
+            <CommitGraph commits={commits} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>
+          </div>
         </div>
       </div>
-      <div className="options">
-      </div>
-    </div>
+    </>
   );
   
 };
