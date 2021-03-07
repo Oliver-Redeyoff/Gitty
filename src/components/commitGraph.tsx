@@ -348,8 +348,8 @@ const commitGraph = (props: CanvasProps) => {
     ctx.beginPath();
 
     // draw grid
-    ctx.rect(real_x, real_y, tileSize.width, tileSize.height);
-    ctx.stroke()
+    // ctx.rect(real_x, real_y, tileSize.width, tileSize.height);
+    // ctx.stroke()
   }
 
   
