@@ -36,7 +36,6 @@ const commitGraph = (props: CanvasProps) => {
   // Reload logic //
   //////////////////
   useEffect(() => {
-    //console.log('component mounted')
     if (!canvasRef.current) {
       return;
     }
@@ -81,7 +80,6 @@ const commitGraph = (props: CanvasProps) => {
     var firstCommitHash = leaf_nodes[0]
 
     // add commits recursively to grid
-    //console.log('calculating grid')
     populateGridRec(firstCommitHash, commits, ctx, 0, 0);
 
     cancelAnimationFrame(animationRequestFrameId);
@@ -90,7 +88,6 @@ const commitGraph = (props: CanvasProps) => {
   }, [props.commits])
 
   useEffect(() => {
-    console.log('window size or tile size updated');
     if (!canvasRef.current) {
       return;
     }
@@ -98,9 +95,6 @@ const commitGraph = (props: CanvasProps) => {
     const ctx = canvas.getContext('2d')!;
 
     cancelAnimationFrame(animationRequestFrameId);
-
-    //console.log('event listeners')
-    //console.log(getEventListeners(canvas));
 
     // add event handler for hover over commits
     canvas.addEventListener('mousemove', mouseMoveHandler2);
@@ -234,22 +228,19 @@ const commitGraph = (props: CanvasProps) => {
     
   }
   
-  function populateGridRec(currentCommitHash: string, commits:any, ctx: CanvasRenderingContext2D, x: number, y: number) {
+  function populateGridRec(currentCommitHash: string, commits: any, ctx: CanvasRenderingContext2D, x: number, y: number) {
 
-    if(commits[currentCommitHash]) {  
-      // draw current commit
-      //drawCommit(ctx, x, y);
-      
-      // add commit to grid if it hasn't been visited yet
-      if(commits[currentCommitHash].visited == false) {
-        addToGrid(currentCommitHash, x, y);
-        // mark commit as visited so that we don't draw commits twice
-        commits[currentCommitHash].visited = true;
-      }
+    if(commits[currentCommitHash]) {
       
       // get parent commits
       let parentCommits = commits[currentCommitHash].parentCommits;
 
+      // add commit to grid if it hasn't been visited yet
+      if(commits[currentCommitHash].visited == false) {
+        addToGrid(currentCommitHash, x, y, parentCommits);
+        // mark commit as visited so that we don't draw commits twice
+        commits[currentCommitHash].visited = true;
+      }
 
       // if no more parents, stop
       if(parentCommits.length == 0) {
@@ -288,7 +279,7 @@ const commitGraph = (props: CanvasProps) => {
     }
   }
 
-  function addToGrid(hash: string, x: number, y: number) {
+  function addToGrid(hash: string, x: number, y: number, parentHashes: any) {
 
     // if this y doesn't exist in the grid yet, add all missing rows to grid
     if(y > grid.current.length-1) {
@@ -300,7 +291,7 @@ const commitGraph = (props: CanvasProps) => {
 
     // try and add commit to grid
     if(!grid.current[y].hasOwnProperty(x)) {
-      grid.current[y][x] = {hash: hash}
+      grid.current[y][x] = {hash: hash, parentHashes: parentHashes}
     } else {
       throw 'Grid position is already taken'
     }
@@ -313,7 +304,6 @@ const commitGraph = (props: CanvasProps) => {
       return 0;
     } else {
       let xCoords = Object.keys(grid.current[y]).map((x) => {return parseInt(x, 10)});
-      console.log(xCoords);
       return Math.max(...xCoords)+1
     }
   }
@@ -332,36 +322,51 @@ const commitGraph = (props: CanvasProps) => {
     let min_y = gridOffset.y>=0 ? Math.floor(gridOffset.y / tileSize.height) : 0;
     let max_y = Math.ceil((props.height+gridOffset.y) / tileSize.height);
 
-    let row_count = min_y;
+    // look at visible commit row by row and draw from this line to the next line
     grid.current.slice(min_y, max_y).forEach(row => {
       
       for(var colStr in row) {
         let col = parseInt(colStr, 10);
         if(col >= min_x && col <= max_x) {
-          drawCommit(ctx, col, row_count);
+          // get real pos of current commit
+          let currentCommitPos = getCommitPos(row[colStr].hash);
+
+          // get parent commits and draw lines to them
+          let parentCommits = row[colStr].parentHashes;
+          parentCommits.forEach(parent => {
+            let parentPos = getCommitPos(parent);
+            if(parentPos.x != null) {
+              drawCommitLink(ctx, currentCommitPos.x, currentCommitPos.y, parentPos.x, parentPos.y);
+            }
+          });
+
         }
       }
-
-      row_count += 1;
     });
 
+    // draw the visible grid
+    grid.current.slice(min_y, max_y).forEach(row => {
+      for(var colStr in row) {
+        let col = parseInt(colStr, 10);
+        if(col >= min_x && col <= max_x) {
+          // get real pos of commit
+          let realPos = getCommitPos(row[colStr].hash);
+          drawCommit(ctx, realPos.x, realPos.y);
+        }
+      }
+    });
 
-    //animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
   }
 
   function drawCommit(ctx: CanvasRenderingContext2D, x: number, y: number) {
     // get real x/y position
-    let real_x = x*tileSize.width - gridOffset.x + 20;
-    let real_y = y*tileSize.height - gridOffset.y + 20;
-
-    // put real_x and real_y in the grid
-    grid.current[y][x.toString()].real_x = real_x;
-    grid.current[y][x.toString()].real_y = real_y;
+    let real_x = x
+    let real_y = y
 
     // draw circle to represent commit
     ctx.beginPath();
     ctx.arc(real_x + tileSize.width/2, real_y + tileSize.height/2, tileSize.height*0.4, 0, 2 * Math.PI);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.fillStyle = 'rgba(200, 200, 200)';
     ctx.fill();
     ctx.beginPath();
 
@@ -370,7 +375,36 @@ const commitGraph = (props: CanvasProps) => {
     // ctx.stroke()
   }
 
+  function getCommitPos(hash: string) {
 
+    let x = null;
+    let y = null;
+
+    let rowCounter = 0;
+    grid.current.forEach(row => {
+      for(var colStr in row) {
+        if(row[colStr].hash == hash) {
+          let col = parseInt(colStr);
+          x = col*tileSize.width - gridOffset.x + 20
+          y = rowCounter*tileSize.height - gridOffset.y + 20
+        }
+      }
+      rowCounter += 1;
+    });
+    
+    return({x: x, y: y})
+  }
+
+  function drawCommitLink(ctx: CanvasRenderingContext2D, xStart: number, yStart: number, xEnd: number, yEnd: number) {
+
+    ctx.beginPath();
+    ctx.moveTo(xStart + tileSize.width/2, yStart + tileSize.height/2);
+    ctx.lineTo(xEnd + tileSize.width/2, yEnd + tileSize.height/2);
+    ctx.stroke();
+
+  }
+
+  
   //////////////////
   // Commit hover //
   //////////////////
