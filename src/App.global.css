@@ -93,6 +93,7 @@ body {
 
 .sidebar-slot img {
   position: absolute;
+  opacity: 0.6;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -115,4 +116,12 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   overflow: hidden;
+}
+
+.commitTooltip {
+  position: absolute;
+  transform: translateX(-50%) translateY(-120%);
+  color: black;
+  background-color: blanchedalmond;
+  padding: 10px;
 }

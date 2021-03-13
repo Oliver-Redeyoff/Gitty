@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import CommitTooltip from './commitTooltip'
 
 interface CanvasProps {
   commits: any;
@@ -15,7 +16,7 @@ const commitGraph = (props: CanvasProps) => {
   const canvasRef = useRef(null);
 
   // canvas is a grid divided into tiles
-  const grid = useRef([]);
+  const grid = useRef([{}]);
   const [tileSize, setTileSize] = useState({width: 30, height: 30});
   const tileSizeLimits = {minWidth: 10, maxWidth: 100, minHeight: 10, maxHeight: 100};
   const [gridOffset, setGridOffset] = useState({x: 0, y: 0});
@@ -27,12 +28,15 @@ const commitGraph = (props: CanvasProps) => {
   let x = 0;
   let y = 0;
 
+  // stores x and y pos of tooltip in state
+  const [tooltipData, setTooltipData] = useState({visible: false, x: 0, y: 0, hash: ''});
+
 
   //////////////////
   // Reload logic //
   //////////////////
   useEffect(() => {
-    console.log('component mounted')
+    //console.log('component mounted')
     if (!canvasRef.current) {
       return;
     }
@@ -42,7 +46,6 @@ const commitGraph = (props: CanvasProps) => {
     canvas.addEventListener('wheel', function(e){ 
 
       setTileSize((currentTileSize) => {
-        console.log(currentTileSize)
         let newTileSize = {...currentTileSize};
         newTileSize.width += Math.round(e.deltaY/2);
         if (newTileSize.width < tileSizeLimits.minWidth) newTileSize.width = tileSizeLimits.minWidth; 
@@ -57,7 +60,6 @@ const commitGraph = (props: CanvasProps) => {
 
     })
 
-    console.log('setting listener')
     canvas.addEventListener('mousedown', mouseDownHandler);
 
     //animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
@@ -65,7 +67,7 @@ const commitGraph = (props: CanvasProps) => {
   }, [])
 
   useEffect(() => {
-    console.log('commits updated');
+    //console.log('commits updated');
     if (!canvasRef.current) {
       return;
     }
@@ -79,7 +81,7 @@ const commitGraph = (props: CanvasProps) => {
     var firstCommitHash = leaf_nodes[0]
 
     // add commits recursively to grid
-    console.log('calculating grid')
+    //console.log('calculating grid')
     populateGridRec(firstCommitHash, commits, ctx, 0, 0);
 
     cancelAnimationFrame(animationRequestFrameId);
@@ -88,7 +90,7 @@ const commitGraph = (props: CanvasProps) => {
   }, [props.commits])
 
   useEffect(() => {
-    console.log('window size or tile size updated');
+    //console.log('window size or tile size updated');
     if (!canvasRef.current) {
       return;
     }
@@ -96,6 +98,10 @@ const commitGraph = (props: CanvasProps) => {
     const ctx = canvas.getContext('2d')!;
 
     cancelAnimationFrame(animationRequestFrameId);
+
+    // add event handler for hover over commits
+    canvas.removeEventListener('mousemove', mouseMoveHandler2);
+    canvas.addEventListener('mousemove', mouseMoveHandler2);
 
     // redraw grid
     animationRequestFrameId = requestAnimationFrame(() => {
@@ -108,8 +114,7 @@ const commitGraph = (props: CanvasProps) => {
   ///////////////////
   // Zoom and drag //
   ///////////////////
-  const mouseDownHandler = function(e) {
-    console.log('here');
+  const mouseDownHandler = function(e: any) {
     x = e.clientX;
     y = e.clientY;
     // Attach the listeners to `document`
@@ -117,7 +122,7 @@ const commitGraph = (props: CanvasProps) => {
     document.addEventListener('mouseup', mouseUpHandler);
   }
 
-  const mouseMoveHandler = function(e) {
+  const mouseMoveHandler = function(e: any) {
     // How far the mouse has been moved
     const dx = e.clientX - x;
     const dy = e.clientY - y;
@@ -146,7 +151,6 @@ const commitGraph = (props: CanvasProps) => {
   };
 
   const bounceBack = function() {
-    console.log('bouncing back')
     let stillBouncing = false;
     setGridOffset((currentGridOffset) => {
       let newGridOffset = {...currentGridOffset}
@@ -234,7 +238,7 @@ const commitGraph = (props: CanvasProps) => {
       
       // add commit to grid if it hasn't been visited yet
       if(commits[currentCommitHash].visited == false) {
-        addToGrid(x, y);
+        addToGrid(currentCommitHash, x, y);
         // mark commit as visited so that we don't draw commits twice
         commits[currentCommitHash].visited = true;
       }
@@ -280,30 +284,33 @@ const commitGraph = (props: CanvasProps) => {
     }
   }
 
-  function addToGrid(x, y) {
+  function addToGrid(hash: string, x: number, y: number) {
+
     // if this y doesn't exist in the grid yet, add all missing rows to grid
     if(y > grid.current.length-1) {
       let limit = grid.current.length;
       for(var i=0 ; i<=(y-limit) ; i++) {
-        grid.current.push([])
+        grid.current.push({})
       }
     }
 
     // try and add commit to grid
-    if(grid.current[y].indexOf(x) == -1) {
-      grid.current[y].push(x)
+    if(!grid.current[y].hasOwnProperty(x)) {
+      grid.current[y][x] = {hash: hash}
     } else {
       throw 'Grid position is already taken'
     }
 
   }
 
-  function findFreeX(y) {
+  function findFreeX(y: number) {
     // if this row doesn't exist yet, then take the first column
     if(y > grid.current.length-1) {
       return 0;
     } else {
-      return Math.max(grid.current[y])+1
+      let xCoords = Object.keys(grid.current[y]).map((x) => {return parseInt(x, 10)});
+      console.log(xCoords);
+      return Math.max(...xCoords)+1
     }
   }
 
@@ -323,11 +330,14 @@ const commitGraph = (props: CanvasProps) => {
 
     let row_count = min_y;
     grid.current.slice(min_y, max_y).forEach(row => {
-      row.forEach(col => {
+      
+      for(var colStr in row) {
+        let col = parseInt(colStr, 10);
         if(col >= min_x && col <= max_x) {
           drawCommit(ctx, col, row_count);
         }
-      });
+      }
+
       row_count += 1;
     });
 
@@ -339,6 +349,10 @@ const commitGraph = (props: CanvasProps) => {
     // get real x/y position
     let real_x = x*tileSize.width - gridOffset.x + 20;
     let real_y = y*tileSize.height - gridOffset.y + 20;
+
+    // put real_x and real_y in the grid
+    grid.current[y][x.toString()].real_x = real_x;
+    grid.current[y][x.toString()].real_y = real_y;
 
     // draw circle to represent commit
     ctx.beginPath();
@@ -352,6 +366,38 @@ const commitGraph = (props: CanvasProps) => {
     // ctx.stroke()
   }
 
+
+  //////////////////
+  // Commit hover //
+  //////////////////
+  const mouseMoveHandler2 = function(e: any) {
+
+    var x = e.pageX - this.offsetLeft;
+    var y = e.pageY - this.offsetTop;
+    
+    // look at each commit and see if it overlaps
+    let hit = false;
+    let rowCounter = 0;
+    grid.current.forEach(row => {
+      for(var col in row) {
+
+        if(x >= row[col].real_x && x <= (row[col].real_x + tileSize.width)
+        && y >= row[col].real_y && y <= (row[col].real_y + tileSize.height)) {
+          hit = true;
+          //console.log(col, rowCounter)
+          setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash});
+        }
+        rowCounter += 1;
+
+      }
+    });
+
+    if(!hit) {
+      setTooltipData({visible: false, x: 0, y: 0, hash: ''});
+    }
+
+  }
+
   
   ////////////////
   // DOM render //
@@ -359,6 +405,7 @@ const commitGraph = (props: CanvasProps) => {
   return (
     <div>
       <canvas ref={canvasRef} width={props.width} height={props.height}/>
+      {tooltipData.visible ? <CommitTooltip hash={tooltipData.hash} x={tooltipData.x} y={tooltipData.y}/> : ''}
     </div>
   );
 }
