@@ -120,8 +120,11 @@ body {
 
 .commitTooltip {
   position: absolute;
+  opacity: 0.7;
   transform: translateX(-50%) translateY(-120%);
   color: black;
   background-color: blanchedalmond;
-  padding: 10px;
+  padding: 5px;
+  font-size: 10px;
+  pointer-events: none;
 }

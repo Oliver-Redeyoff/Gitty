@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import CommitTooltip from './commitTooltip'
 
 interface CanvasProps {
@@ -90,7 +90,7 @@ const commitGraph = (props: CanvasProps) => {
   }, [props.commits])
 
   useEffect(() => {
-    //console.log('window size or tile size updated');
+    console.log('window size or tile size updated');
     if (!canvasRef.current) {
       return;
     }
@@ -99,8 +99,10 @@ const commitGraph = (props: CanvasProps) => {
 
     cancelAnimationFrame(animationRequestFrameId);
 
+    //console.log('event listeners')
+    //console.log(getEventListeners(canvas));
+
     // add event handler for hover over commits
-    canvas.removeEventListener('mousemove', mouseMoveHandler2);
     canvas.addEventListener('mousemove', mouseMoveHandler2);
 
     // redraw grid
@@ -108,6 +110,8 @@ const commitGraph = (props: CanvasProps) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawGraph(ctx);
     });
+
+    return() => canvas.removeEventListener('mousemove', mouseMoveHandler2);
   }, [props.width, props.height, tileSize, gridOffset])
 
 
