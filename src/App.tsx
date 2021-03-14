@@ -22,7 +22,6 @@ const Main = () => {
       let newCommitGraphContainerSize = {...currentSize};
       newCommitGraphContainerSize.width = canvasContainerRef.current.innerWidth;
       newCommitGraphContainerSize.height = canvasContainerRef.current.innerHeight;
-      console.log(newCommitGraphContainerSize)
       return newCommitGraphContainerSize;
     })
 
@@ -31,7 +30,6 @@ const Main = () => {
         let newCommitGraphContainerSize = {...currentSize};
         newCommitGraphContainerSize.width = canvasContainerRef.current.clientWidth;
         newCommitGraphContainerSize.height = canvasContainerRef.current.clientHeight;
-        console.log(newCommitGraphContainerSize)
         return newCommitGraphContainerSize;
       })
     })
@@ -42,17 +40,15 @@ const Main = () => {
     
     // get all commits
     git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
-      .then((res:any) => {console.log(res); setCommits(res.all)});
+      .then((res:any) => {setCommits(res.all)});
     
   }, []);
 
   useEffect(() => {
-    console.log(canvasContainerRef)
     setCommitGraphContainerSize((currentSize) => {
       let newCommitGraphContainerSize = {...currentSize};
       newCommitGraphContainerSize.width = canvasContainerRef.current.clientWidth;
       newCommitGraphContainerSize.height = canvasContainerRef.current.clientHeight;
-      console.log(newCommitGraphContainerSize)
       return newCommitGraphContainerSize;
     })
   }, [commits, canvasContainerRef])

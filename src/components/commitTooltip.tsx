@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 interface TooltopProps {
-    hash: string,
-    x: number,
-    y: number,
-    author: string,
-    date: string
+    hash: string;
+    x: number;
+    y: number;
+    author: string;
+    date: string;
 }
 
 const commitTooltip = (props: TooltopProps) => {
@@ -17,4 +17,4 @@ const commitTooltip = (props: TooltopProps) => {
     )
 }
 
-export default commitTooltip
+export default commitTooltip;

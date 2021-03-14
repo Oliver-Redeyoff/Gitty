@@ -77,13 +77,11 @@ const commitGraph = (props: CanvasProps) => {
     const ctx = canvas.getContext('2d')!;
 
     // get commits from props
-    let commits: any = processCommits(props.commits)
+    let commits: any = processCommits(props.commits);
     setProcessedCommits(commits);
 
     // set first commit
-    var firstCommitHash = leaf_nodes[0]
-    
-    console.log(processedCommits)
+    var firstCommitHash = leaf_nodes[0];
 
     // add commits recursively to grid
     populateGridRec(firstCommitHash, commits, ctx, 0, 0);
@@ -135,9 +133,9 @@ const commitGraph = (props: CanvasProps) => {
     setGridOffset((currentGridOffset) => {
       let newGridOffset = {...currentGridOffset};
       newGridOffset.x -= dx;
-      if(newGridOffset.x < -30) newGridOffset.x = -30
+      if(newGridOffset.x < -30) newGridOffset.x = -30;
       newGridOffset.y -= dy;
-      if (newGridOffset.y < -30) newGridOffset.y = -30
+      if (newGridOffset.y < -30) newGridOffset.y = -30;
       return newGridOffset;
     })
   }
@@ -148,7 +146,7 @@ const commitGraph = (props: CanvasProps) => {
     document.removeEventListener('mouseup', mouseUpHandler);
     setGridOffset((currentGridOffset) => {
       if(currentGridOffset.x < 0 || currentGridOffset.y < 0) {
-        bounceBack()
+        bounceBack();
       }
       return currentGridOffset;
     })
@@ -184,14 +182,14 @@ const commitGraph = (props: CanvasProps) => {
   ///////////////////////////////////////
   function processCommits(commits: any) {
 
-    leaf_nodes = []
-    let commitsProcessed: any = {}
+    leaf_nodes = [];
+    let commitsProcessed: any = {};
     
     // first add all commits to object with parent hashes as array
     commits.forEach((commit: any) => {
 
       // add this commit as a child com
-      let parents = commit.parentHashes.split(" ")
+      let parents = commit.parentHashes.split(" ");
       parents.forEach((parent: any) => {
         if(parent.length < 5) {
           let index = parents.indexOf(parent);
@@ -207,7 +205,7 @@ const commitGraph = (props: CanvasProps) => {
         parentCommits: parents,
         childCommits: [],
         visited: false
-      }
+      };
 
     });
 
@@ -217,7 +215,7 @@ const commitGraph = (props: CanvasProps) => {
       commitsProcessed[key].parentCommits.forEach((parent: any) => {
         
         if(commitsProcessed[parent]) {
-          commitsProcessed[parent].childCommits.push(key)
+          commitsProcessed[parent].childCommits.push(key);
         }
       });
 
@@ -243,7 +241,7 @@ const commitGraph = (props: CanvasProps) => {
 
       // add commit to grid if it hasn't been visited yet
       if(commits[currentCommitHash].visited == false) {
-        addToGrid(currentCommitHash, x, y, parentCommits);
+        addToGrid(currentCommitHash, x, y, commits[currentCommitHash].authorName, parentCommits);
         // mark commit as visited so that we don't draw commits twice
         commits[currentCommitHash].visited = true;
       }
@@ -285,21 +283,20 @@ const commitGraph = (props: CanvasProps) => {
     }
   }
 
-  function addToGrid(hash: string, x: number, y: number, parentHashes: any) {
-
+  function addToGrid(hash: string, x: number, y: number, author: string, parentHashes: any) {
     // if this y doesn't exist in the grid yet, add all missing rows to grid
     if(y > grid.current.length-1) {
       let limit = grid.current.length;
       for(var i=0 ; i<=(y-limit) ; i++) {
-        grid.current.push({})
+        grid.current.push({});
       }
     }
 
     // try and add commit to grid
     if(!grid.current[y].hasOwnProperty(x)) {
-      grid.current[y][x] = {hash: hash, parentHashes: parentHashes}
+      grid.current[y][x] = {hash: hash, parentHashes: parentHashes, author: author};
     } else {
-      throw 'Grid position is already taken'
+      throw 'Grid position is already taken';
     }
 
   }
@@ -310,7 +307,7 @@ const commitGraph = (props: CanvasProps) => {
       return 0;
     } else {
       let xCoords = Object.keys(grid.current[y]).map((x) => {return parseInt(x, 10)});
-      return Math.max(...xCoords)+1
+      return Math.max(...xCoords)+1;
     }
   }
 
@@ -357,24 +354,34 @@ const commitGraph = (props: CanvasProps) => {
         if(col >= min_x && col <= max_x) {
           // get real pos of commit
           let realPos = getCommitPos(row[colStr].hash);
-          drawCommit(ctx, realPos.x, realPos.y);
+          drawCommit(ctx, realPos.x, realPos.y, row[colStr].author);
         }
       }
     });
 
   }
 
-  function drawCommit(ctx: CanvasRenderingContext2D, x: number, y: number) {
-    // get real x/y position
-    let real_x = x
-    let real_y = y
+  function drawCommit(ctx: CanvasRenderingContext2D, x: number, y: number, author: string) {
 
     // draw circle to represent commit
     ctx.beginPath();
-    ctx.arc(real_x + tileSize.width/2, real_y + tileSize.height/2, tileSize.height*0.4, 0, 2 * Math.PI);
+    ctx.arc(x + tileSize.width/2, y + tileSize.height/2, tileSize.height*0.4, 0, 2 * Math.PI);
     ctx.fillStyle = 'rgba(200, 200, 200)';
     ctx.fill();
-    ctx.beginPath();
+
+    let fontSize = tileSize.width*0.25;
+    ctx.font = fontSize + "px Arial";
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.textAlign = "center";
+
+    // get authors initials
+    let authorInitials = ''
+    author.split(' ').forEach((name: string) => {
+      authorInitials += name.charAt(0);
+    })
+    let textWidth = ctx.measureText(authorInitials).width;
+    let textHeight = ctx.measureText(authorInitials).actualBoundingBoxAscent + ctx.measureText(authorInitials).actualBoundingBoxDescent;
+    ctx.fillText(authorInitials, x + tileSize.width/2, y + tileSize.height/2 + textHeight/2);
 
     // draw grid
     // ctx.rect(real_x, real_y, tileSize.width, tileSize.height);
@@ -391,14 +398,14 @@ const commitGraph = (props: CanvasProps) => {
       for(var colStr in row) {
         if(row[colStr].hash == hash) {
           let col = parseInt(colStr);
-          x = col*tileSize.width - gridOffset.x + 20
-          y = rowCounter*tileSize.height - gridOffset.y + 20
+          x = col*tileSize.width - gridOffset.x + 20;
+          y = rowCounter*tileSize.height - gridOffset.y + 20;
         }
       }
       rowCounter += 1;
     });
     
-    return({x: x, y: y})
+    return({x: x, y: y});
   }
 
   function drawCommitLink(ctx: CanvasRenderingContext2D, xStart: number, yStart: number, xEnd: number, yEnd: number) {
@@ -411,9 +418,9 @@ const commitGraph = (props: CanvasProps) => {
   }
 
   
-  //////////////////
-  // Commit hover //
-  //////////////////
+  ////////////////////
+  // Commit tooltip //
+  ////////////////////
   const mouseMoveHandler2 = function(e: any) {
 
     var x = e.pageX - this.offsetLeft;
@@ -431,7 +438,6 @@ const commitGraph = (props: CanvasProps) => {
         && y >= realPos.y && y <= (realPos.y + tileSize.height)) {
           hit = true;
           setProcessedCommits((processedCommits) => {
-            console.log(processedCommits[row[col].hash]);
             let currentCommit = processedCommits[row[col].hash];
             setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
             return processedCommits;
@@ -460,4 +466,4 @@ const commitGraph = (props: CanvasProps) => {
   );
 }
 
-export default commitGraph
+export default commitGraph;
