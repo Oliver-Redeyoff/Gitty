@@ -11,7 +11,10 @@ const commitGraph = (props: CanvasProps) => {
   
   // store globalId for requestanimationFrames
   var animationRequestFrameId: number;
-  
+
+  // commits are in state
+  const [processedCommits, setProcessedCommits] = useState({})
+
   // reference for the canvas dom element
   const canvasRef = useRef(null);
 
@@ -29,7 +32,7 @@ const commitGraph = (props: CanvasProps) => {
   let y = 0;
 
   // stores x and y pos of tooltip in state
-  const [tooltipData, setTooltipData] = useState({visible: false, x: 0, y: 0, hash: ''});
+  const [tooltipData, setTooltipData] = useState({visible: false, x: 0, y: 0, hash: '', author: '', date: ''});
 
 
   //////////////////
@@ -75,16 +78,19 @@ const commitGraph = (props: CanvasProps) => {
 
     // get commits from props
     let commits: any = processCommits(props.commits)
+    setProcessedCommits(commits);
 
     // set first commit
     var firstCommitHash = leaf_nodes[0]
+    
+    console.log(processedCommits)
 
     // add commits recursively to grid
     populateGridRec(firstCommitHash, commits, ctx, 0, 0);
 
     cancelAnimationFrame(animationRequestFrameId);
-
     animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
+
   }, [props.commits])
 
   useEffect(() => {
@@ -419,11 +425,17 @@ const commitGraph = (props: CanvasProps) => {
     grid.current.forEach(row => {
       for(var col in row) {
 
-        if(x >= row[col].real_x && x <= (row[col].real_x + tileSize.width)
-        && y >= row[col].real_y && y <= (row[col].real_y + tileSize.height)) {
+        let realPos = getCommitPos(row[col].hash);
+
+        if(x >= realPos.x && x <= (realPos.x + tileSize.width)
+        && y >= realPos.y && y <= (realPos.y + tileSize.height)) {
           hit = true;
-          //console.log(col, rowCounter)
-          setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash});
+          setProcessedCommits((processedCommits) => {
+            console.log(processedCommits[row[col].hash]);
+            let currentCommit = processedCommits[row[col].hash];
+            setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
+            return processedCommits;
+          })
         }
         rowCounter += 1;
 
@@ -431,7 +443,7 @@ const commitGraph = (props: CanvasProps) => {
     });
 
     if(!hit) {
-      setTooltipData({visible: false, x: 0, y: 0, hash: ''});
+      setTooltipData({visible: false, x: 0, y: 0, hash: '', author: '', date: ''});
     }
 
   }
@@ -443,7 +455,7 @@ const commitGraph = (props: CanvasProps) => {
   return (
     <div>
       <canvas ref={canvasRef} width={props.width} height={props.height}/>
-      {tooltipData.visible ? <CommitTooltip hash={tooltipData.hash} x={tooltipData.x} y={tooltipData.y}/> : ''}
+      {tooltipData.visible ? <CommitTooltip hash={tooltipData.hash} x={tooltipData.x} y={tooltipData.y} author={tooltipData.author} date={tooltipData.date}/> : ''}
     </div>
   );
 }
