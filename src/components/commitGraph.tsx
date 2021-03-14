@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import CommitTooltip from './commitTooltip'
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import CommitTooltip from './commitTooltip';
 
 interface CanvasProps {
   commits: any;
@@ -13,7 +13,7 @@ const commitGraph = (props: CanvasProps) => {
   var animationRequestFrameId: number;
 
   // commits are in state
-  const [processedCommits, setProcessedCommits] = useState({})
+  const [processedCommits, setProcessedCommits] = useState({});
 
   // reference for the canvas dom element
   const canvasRef = useRef(null);
@@ -66,7 +66,7 @@ const commitGraph = (props: CanvasProps) => {
 
     //animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
 
-  }, [])
+  }, []);
 
   useEffect(() => {
     //console.log('commits updated');
@@ -89,7 +89,7 @@ const commitGraph = (props: CanvasProps) => {
     cancelAnimationFrame(animationRequestFrameId);
     animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
 
-  }, [props.commits])
+  }, [props.commits]);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -110,7 +110,7 @@ const commitGraph = (props: CanvasProps) => {
     });
 
     return() => canvas.removeEventListener('mousemove', mouseMoveHandler2);
-  }, [props.width, props.height, tileSize, gridOffset])
+  }, [props.width, props.height, tileSize, gridOffset]);
 
 
   ///////////////////

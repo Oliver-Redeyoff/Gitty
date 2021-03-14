@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import simpleGit, {SimpleGit} from 'simple-git';
 
 import CommitGraph from './components/commitGraph';
 
-import simpleGit, {SimpleGit} from 'simple-git';
 
 import './App.global.css';
 
-const git: SimpleGit = simpleGit('/Users/oliver/Documents/Programming/githubClones/gitTest', { binary: 'git' });
+const git: SimpleGit = simpleGit('.', { binary: 'git' });
 
 const Main = () => {
 
@@ -17,7 +17,6 @@ const Main = () => {
   const [commitGraphContainerSize, setCommitGraphContainerSize] = useState({width: 0, height: 0});
 
   useEffect(() => {
-
     setCommitGraphContainerSize((currentSize) => {
       let newCommitGraphContainerSize = {...currentSize};
       newCommitGraphContainerSize.width = canvasContainerRef.current.innerWidth;
