@@ -23,7 +23,7 @@ function themeManager() {
 
     this.init = function() {
         return new Promise(resolve => {
-            getThemes().then((res: any) => {
+            getTheme().then((res: any) => {
                 resolve(res);
             })
         })
@@ -31,7 +31,7 @@ function themeManager() {
 
 }
 
-function getThemes() {
+function getTheme() {
 
     return new Promise(resolve =>{
 
