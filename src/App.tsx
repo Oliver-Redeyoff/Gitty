@@ -11,8 +11,6 @@ var themeManagerModule = require('./gittyThemes/themeManager');
 
 const Main = () => {
 
-  // theme state
-  const [theme, setTheme] = useState<any>({});
   // commit graph container ref
   const canvasContainerRef = useRef(null);
   const [commits, setCommits] = useState([]);
@@ -64,19 +62,27 @@ const Main = () => {
   const setGittyTheme = function(theme) {
     console.log(theme)
     let root = document.documentElement;
-    root.style.setProperty('--page-bg-color', theme.page_bg);
-    root.style.setProperty('--header-bg-color', theme.header_bg);
-    root.style.setProperty('--header-title-color', theme.header_title);
-    root.style.setProperty('--sidebar-bg-color', theme.sidebar_bg);
-    root.style.setProperty('--sidebar-item-color', theme.sidebar_item);
-    root.style.setProperty('--sidebar-item-bg-color', theme.sidebar_item_bg);
-    root.style.setProperty('--content-bg-color', theme.content_bg);
+    root.style.setProperty('--page-bg-color', theme.page_bg_color);
+
+    root.style.setProperty('--header-height', theme.header_height);
+    root.style.setProperty('--header-bg-color', theme.header_bg_color);
+
+    root.style.setProperty('--header-title-color', theme.header_title_color);
+    root.style.setProperty('--header-bottom-border-color', theme.header_bottom_border_color);
+
+    root.style.setProperty('--sidebar-bg-color', theme.sidebar_bg_color);
+    root.style.setProperty('--sidebar-border-color', theme.sidebar_border_color);
+    root.style.setProperty('--sidebar-item-color', theme.sidebar_item_color);
+    root.style.setProperty('--sidebar-item-bg-color', theme.sidebar_item_bg_color);
+    
+    root.style.setProperty('--content-bg-color', theme.content_bg_color);
+    root.style.setProperty('--content-border-color', theme.content_border_color);
   }
 
 
   return(
     <>
-      <div className="header" style={{'backgroundColor': theme.header_bg}}>
+      <div className="header">
         <h1>Gitty</h1>
       </div>
       <div className="all">

@@ -1,14 +1,21 @@
 const themeDefaults = {
-    page_bg: "green",
+    page_bg_color: "white",
     
-    header_bg: "black",
-    header_title: "white",
+    header_height: "70px",
+    header_bg_color: "black",
+    header_bottom_border_color: "transparent",
+    header_title_color: "white",
 
-    sidebar_bg: "white",
-    sidebar_item: "black",
-    sidebar_item_bg: "black",
+    sidebar_bg_color: "black",
+    sidebar_border_color: "transparent",
+    sidebar_item_color: "white",
+    sidebar_item_bg_color: "grey",
 
-    content_bg: "white"
+    content_bg_color: "black",
+    content_border_color: "transparent",
+    content_commit_bg_color: "white",
+    content_commit_text_color: "black",
+    content_commit_link_color: "white"
 }
 
 
@@ -31,7 +38,7 @@ function getThemes() {
         const fs = require('fs');
         const path = require('path');
         const themesPath = __dirname + '/gittyThemes/themes';
-        let currentThemeFile = 'light.json';
+        let currentThemeFile = 'dark.json';
         let themeData = {};
 
         // get current theme data

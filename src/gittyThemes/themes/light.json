@@ -1,12 +1,15 @@
 {
-    "page_bg": "white",
+    "page_bg_color": "white",
     
-    "header_bg": "rgba(0, 0, 0, 0.2)",
-    "header_title": "green",
+    "header_bg_color": "#f8f5f1",
+    "header_title_color": "#e9896a",
 
-    "sidebar_bg": "rgba(0, 0, 0, 0.2)",
-    "sidebar_item": "green",
-    "sidebar_item_bg": "blue",
+    "sidebar_bg_color": "#f8f5f1",
+    "sidebar_item_color": "#e9896a",
+    "sidebar_item_bg_color": "#edeae6",
 
-    "content_bg": "rgba(0, 0, 0, 0.2)"
+    "content_bg_color": "#f8f5f1",
+    "content_commit_bg_color": "#e9896a",
+    "content_commit_text_color": "white",
+    "content_commit_link_color": "black"
 }

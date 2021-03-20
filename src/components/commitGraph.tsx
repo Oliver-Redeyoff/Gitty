@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CommitTooltip from './commitTooltip';
 
+var themeManagerModule = require('../gittyThemes/themeManager');
+
 interface CanvasProps {
   commits: any;
   width: number;
@@ -9,6 +11,9 @@ interface CanvasProps {
 
 const commitGraph = (props: CanvasProps) => {
   
+  // gitty theme
+  const [theme, setTheme] = useState<any>({});
+
   // store globalId for requestanimationFrames
   var animationRequestFrameId: number;
 
@@ -38,7 +43,12 @@ const commitGraph = (props: CanvasProps) => {
   //////////////////
   // Reload logic //
   //////////////////
-  useEffect(() => {
+  useEffect(() => { 
+
+    // get theme
+    let themeManager = new themeManagerModule();
+    themeManager.init()
+      .then((theme: any) => {setTheme(theme)});
 
     if (!canvasRef.current) {
       return;
@@ -367,12 +377,12 @@ const commitGraph = (props: CanvasProps) => {
     // draw circle to represent commit
     ctx.beginPath();
     ctx.arc(x + tileSize.width/2, y + tileSize.height/2, tileSize.height*0.4, 0, 2 * Math.PI);
-    ctx.fillStyle = 'rgba(255, 255, 255)';
+    ctx.fillStyle = theme.content_commit_bg_color;
     ctx.fill();
 
     let fontSize = tileSize.width*0.25;
     ctx.font = fontSize + "px Arial";
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillStyle = theme.content_commit_text_color;
     ctx.textAlign = "center";
 
     // get authors initials
@@ -414,6 +424,7 @@ const commitGraph = (props: CanvasProps) => {
     ctx.beginPath();
     ctx.moveTo(xStart + tileSize.width/2, yStart + tileSize.height/2);
     ctx.lineTo(xEnd + tileSize.width/2, yEnd + tileSize.height/2);
+    ctx.strokeStyle = theme.content_commit_link_color;
     ctx.stroke();
 
   }

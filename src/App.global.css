@@ -1,18 +1,21 @@
  :root {
-   --header-height: 100px;
    --sidebar-width: 100px;
 
    /*colors*/
    --page-bg-color: 'transparent';
 
+   --header-height: 60px;
    --header-bg-color: 'transparent';
+   --header-bottom-border-color: 'transparent';
    --header-title-color: 'transparent';
    
    --sidebar-bg-color: 'transparent';
+   --sidebar-border-color: 'transparent';
    --sidebar-item-color: 'transparent';
    --sidebar-item-bg-color: 'transparent';
    
    --content-bg-color: 'transparent';
+   --content-border-color: 'transparent';
 
  }
  
@@ -38,6 +41,7 @@ body {
 
 /* HEADER */
 .header {
+  position: relative;
   position: block;
   margin-top: 0;
   margin-left: 0;
@@ -47,16 +51,21 @@ body {
   padding: 20px;
   padding-top: 40px;
   background-color: var(--header-bg-color);
+  border-bottom: 1.5px solid var(--header-bottom-border-color);
 }
 .header h1 {
+  position: absolute;
   margin: 0px;
+  top: calc(var(--header-height) / 2);
+  left: 100px;
+  transform: translateY(-50%);
   color: var(--header-title-color);
 }
 
 
 /* ALL BODY */
 .all{
-  height: calc(100vh - 100px);
+  height: calc(100vh - var(--header-height));
   width: 100%;
   box-sizing: border-box;
 }
@@ -83,6 +92,7 @@ body {
   overflow: hidden;
   background-color: var(--sidebar-bg-color);
   border-radius: 10px;
+  border: 1.5px solid var(--sidebar-border-color);
 }
 
 .sidebar-slot {
@@ -92,6 +102,7 @@ body {
   box-sizing: border-box;
   background-color: transparent;
   transition: all 0.4s;
+  cursor: pointer;
 }
 .sidebar-slot:last-of-type {
   border-bottom: none;
@@ -104,7 +115,7 @@ body {
   position: absolute;
   fill: var(--sidebar-item-color);
   width: 30%;
-  opacity: 0.6;
+  opacity: 0.8;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -126,6 +137,7 @@ body {
   height: 100%;
   background-color: var(--content-bg-color);
   border-radius: 10px;
+  border: 1.5px solid var(--content-border-color);
   overflow: hidden;
 }
 
