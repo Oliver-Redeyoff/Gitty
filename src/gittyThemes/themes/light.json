@@ -5,6 +5,8 @@
     "header_title": "green",
 
     "sidebar_bg": "rgba(0, 0, 0, 0.2)",
-    "siderbar_item": "green",
-    "sidebar_item_bg": "blue"
+    "sidebar_item": "green",
+    "sidebar_item_bg": "blue",
+
+    "content_bg": "rgba(0, 0, 0, 0.2)"
 }

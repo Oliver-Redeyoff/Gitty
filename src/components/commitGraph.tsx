@@ -367,7 +367,7 @@ const commitGraph = (props: CanvasProps) => {
     // draw circle to represent commit
     ctx.beginPath();
     ctx.arc(x + tileSize.width/2, y + tileSize.height/2, tileSize.height*0.4, 0, 2 * Math.PI);
-    ctx.fillStyle = 'rgba(200, 200, 200)';
+    ctx.fillStyle = 'rgba(255, 255, 255)';
     ctx.fill();
 
     let fontSize = tileSize.width*0.25;
