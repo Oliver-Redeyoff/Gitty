@@ -39,6 +39,7 @@ const commitGraph = (props: CanvasProps) => {
   // Reload logic //
   //////////////////
   useEffect(() => {
+
     if (!canvasRef.current) {
       return;
     }

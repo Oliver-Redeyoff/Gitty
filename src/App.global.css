@@ -1,18 +1,26 @@
  :root {
    --header-height: 100px;
    --sidebar-width: 100px;
+
+   /*colors*/
+   --page-bg-color: 'transparent';
+
+   --header-bg-color: 'transparent';
+   --header-title-color: 'transparent';
+   
+   --sidebar-bg-color: 'transparent';
+   --siderbar-iten-color: 'transparent';
+   --sidebar-item-bg-color: 'transparent';
+   
+   --content-bg-color: 'transparent';
+
  }
  
 body {
   position: relative;
   color: white;
   height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
-  );
+  background: var(--page-bg-color);
   font-family: sans-serif;
   margin: 0px;
   overflow: hidden;
@@ -38,10 +46,11 @@ body {
   box-sizing: border-box;
   padding: 20px;
   padding-top: 40px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--header-bg-color);
 }
 .header h1 {
   margin: 0px;
+  color: var(--header-title-color);
 }
 
 
@@ -72,7 +81,7 @@ body {
   transform: translateY(-50%);
   box-sizing: border-box;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--sidebar-bg-color);
   border-radius: 10px;
 }
 
@@ -88,7 +97,7 @@ body {
   border-bottom: none;
 }
 .sidebar-slot:hover {
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: var(--sidebar-item-bg-color);
 }
 
 .sidebar-slot img {

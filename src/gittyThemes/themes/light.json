@@ -1,0 +1,10 @@
+{
+    "page_bg": "white",
+    
+    "header_bg": "rgba(0, 0, 0, 0.2)",
+    "header_title": "green",
+
+    "sidebar_bg": "rgba(0, 0, 0, 0.2)",
+    "siderbar_item": "green",
+    "sidebar_item_bg": "blue"
+}
