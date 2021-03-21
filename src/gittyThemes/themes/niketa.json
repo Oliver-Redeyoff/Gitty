@@ -1,0 +1,17 @@
+{
+    "page_bg_color": "rgb(41, 44, 60)",
+    
+    "header_bg_color": "transparent",
+    "header_bottom_border_color": "rgb(72, 89, 98)",
+    "header_title_color": "rgb(195, 147, 82)",
+
+    "sidebar_bg_color": "rgb(77, 40, 88)",
+    "sidebar_item_color": "rgb(224, 218, 226)",
+    "sidebar_item_bg_color": "rgb(67, 30, 78)",
+
+    "content_bg_color": "transparent",
+    "content_border_color": "rgb(72, 89, 98)",
+    "content_commit_bg_color": "rgb(222, 84, 108)",
+    "content_commit_text_color": "rgb(224, 218, 226)",
+    "content_commit_link_color": "black"
+}

@@ -5,6 +5,7 @@ const themeDefaults = {
     header_bg_color: "black",
     header_bottom_border_color: "transparent",
     header_title_color: "white",
+    header_title_bottom_border_color: "transparent",
 
     sidebar_bg_color: "black",
     sidebar_border_color: "transparent",
@@ -38,7 +39,7 @@ function getTheme() {
         const fs = require('fs');
         const path = require('path');
         const themesPath = __dirname + '/gittyThemes/themes';
-        let currentThemeFile = 'dark.json';
+        let currentThemeFile = 'niketa.json';
         let themeData = {};
 
         // get current theme data

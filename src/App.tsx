@@ -68,6 +68,7 @@ const Main = () => {
     root.style.setProperty('--header-bg-color', theme.header_bg_color);
 
     root.style.setProperty('--header-title-color', theme.header_title_color);
+    root.style.setProperty('--header-title-bottom-border-color', theme.header_title_bottom_border_color);
     root.style.setProperty('--header-bottom-border-color', theme.header_bottom_border_color);
 
     root.style.setProperty('--sidebar-bg-color', theme.sidebar_bg_color);

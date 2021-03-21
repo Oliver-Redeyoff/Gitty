@@ -95,6 +95,7 @@ const commitGraph = (props: CanvasProps) => {
     var firstCommitHash = leaf_nodes[0];
 
     // add commits recursively to grid
+    grid.current = [{}];
     populateGridRec(firstCommitHash, commits, ctx, 0, 0);
 
     cancelAnimationFrame(animationRequestFrameId);

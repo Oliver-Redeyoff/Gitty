@@ -8,6 +8,7 @@
    --header-bg-color: 'transparent';
    --header-bottom-border-color: 'transparent';
    --header-title-color: 'transparent';
+   --header-title-bottom-border-color: 'transparent';
    
    --sidebar-bg-color: 'transparent';
    --sidebar-border-color: 'transparent';
@@ -60,6 +61,8 @@ body {
   left: 100px;
   transform: translateY(-50%);
   color: var(--header-title-color);
+  padding: 10px 15px 10px 10px;
+  border-bottom: 1.5px solid var(--header-title-bottom-border-color);
 }
 
 
