@@ -39,7 +39,7 @@ function getTheme() {
         const fs = require('fs');
         const path = require('path');
         const themesPath = __dirname + '/gittyThemes/themes';
-        let currentThemeFile = 'niketa.json';
+        let currentThemeFile = 'gruvbox.json';
         let themeData = {};
 
         // get current theme data

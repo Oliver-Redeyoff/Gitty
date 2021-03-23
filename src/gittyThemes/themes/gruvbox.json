@@ -1,0 +1,19 @@
+{
+    "page_bg_color": "rgb(50, 48, 47)",
+    
+    "header_bg_color": "transparent",
+    "header_bottom_border_color": "transparent",
+    "header_title_color": "rgb(195, 147, 82)",
+    "header_title_bottom_border_color": "rgb(64, 61, 58)",
+
+    "sidebar_bg_color": "transparent",
+    "sidebar_item_color": "rgb(172, 181, 111)",
+    "sidebar_border_color": "rgb(64, 61, 58)",
+    "sidebar_item_bg_color": "rgba(255, 255, 255, 0.3)",
+
+    "content_bg_color": "transparent",
+    "content_border_color": "rgb(64, 61, 58)",
+    "content_commit_bg_color": "rgb(208, 108, 99)",
+    "content_commit_text_color": "rgb(224, 218, 226)",
+    "content_commit_link_color": "black"
+}
