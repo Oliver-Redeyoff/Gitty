@@ -43,14 +43,16 @@ function getTheme() {
         let themeData = {};
 
         // get current theme data
-        fs.readdir(themesPath, (err, files) => {
-
-            files.forEach(file => {
-                if(currentThemeFile == file) {
-                    let rawdata = fs.readFileSync(path.resolve(themesPath, file));
-                    themeData = JSON.parse(rawdata);
-                }
-            });
+        fs.readdir(themesPath, (_: any, files: any) => {
+            
+            if(files != null) {
+                files.forEach(file => {
+                    if(currentThemeFile == file) {
+                        let rawdata = fs.readFileSync(path.resolve(themesPath, file));
+                        themeData = JSON.parse(rawdata);
+                    }
+                });
+            }
 
             // file in missing values
             let colorList = Object.keys(themeDefaults);

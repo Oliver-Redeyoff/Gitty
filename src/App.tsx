@@ -66,31 +66,31 @@ const Main = () => {
 
 
   const setGittyTheme = function(theme) {
-    console.log(theme)
-    let root = document.documentElement;
-    root.style.setProperty('--page-bg-color', theme.page_bg_color);
+    if (document != null) {
+      let root = document.documentElement;
+      root.style.setProperty('--page-bg-color', theme.page_bg_color);
 
-    root.style.setProperty('--header-height', theme.header_height);
-    root.style.setProperty('--header-bg-color', theme.header_bg_color);
+      root.style.setProperty('--header-height', theme.header_height);
+      root.style.setProperty('--header-bg-color', theme.header_bg_color);
 
-    root.style.setProperty('--header-title-color', theme.header_title_color);
-    root.style.setProperty('--header-title-bottom-border-color', theme.header_title_bottom_border_color);
-    root.style.setProperty('--header-bottom-border-color', theme.header_bottom_border_color);
+      root.style.setProperty('--header-title-color', theme.header_title_color);
+      root.style.setProperty('--header-title-bottom-border-color', theme.header_title_bottom_border_color);
+      root.style.setProperty('--header-bottom-border-color', theme.header_bottom_border_color);
 
-    root.style.setProperty('--sidebar-bg-color', theme.sidebar_bg_color);
-    root.style.setProperty('--sidebar-border-color', theme.sidebar_border_color);
-    root.style.setProperty('--sidebar-item-color', theme.sidebar_item_color);
-    root.style.setProperty('--sidebar-item-bg-color', theme.sidebar_item_bg_color);
-    
-    root.style.setProperty('--content-bg-color', theme.content_bg_color);
-    root.style.setProperty('--content-border-color', theme.content_border_color);
+      root.style.setProperty('--sidebar-bg-color', theme.sidebar_bg_color);
+      root.style.setProperty('--sidebar-border-color', theme.sidebar_border_color);
+      root.style.setProperty('--sidebar-item-color', theme.sidebar_item_color);
+      root.style.setProperty('--sidebar-item-bg-color', theme.sidebar_item_bg_color);
+      
+      root.style.setProperty('--content-bg-color', theme.content_bg_color);
+      root.style.setProperty('--content-border-color', theme.content_border_color);
+    }
   }
 
   const openRepoFinder = function() {
     remote.dialog.showOpenDialog({properties: ['openDirectory'] }).then(function (response) {
       if (!response.canceled) {
         // need to check that the folder contains a .git folder
-        console.log(response.filePaths[0]);
 
         new Promise(resolve =>{
           const fs = require('fs');
@@ -105,7 +105,6 @@ const Main = () => {
               resolve(isRepo);
           });
         }).then((isRepo: boolean) => {
-          console.log(isRepo)
           if (isRepo) {
             setCurrentRepo(response.filePaths[0]);
           }

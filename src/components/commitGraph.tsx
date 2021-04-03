@@ -1,4 +1,6 @@
+import { sign } from 'crypto';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { act } from 'react-dom/test-utils';
 import CommitTooltip from './commitTooltip';
 
 var themeManagerModule = require('../gittyThemes/themeManager');
@@ -44,17 +46,20 @@ const commitGraph = (props: CanvasProps) => {
   // Reload logic //
   //////////////////
   useEffect(() => { 
-
+    
     // get theme
     let themeManager = new themeManagerModule();
     themeManager.init()
-      .then((theme: any) => {setTheme(theme)});
+      .then((theme: any) => {
+        act(() => {
+          setTheme(theme)
+        })
+      });
 
     if (!canvasRef.current) {
       return;
     }
     const canvas: HTMLCanvasElement = canvasRef.current!;
-    const ctx = canvas.getContext('2d')!;
 
     canvas.addEventListener('wheel', function(e){ 
 
@@ -74,6 +79,8 @@ const commitGraph = (props: CanvasProps) => {
     })
 
     canvas.addEventListener('mousedown', mouseDownHandler);
+
+    return theme;
 
   }, []);
 

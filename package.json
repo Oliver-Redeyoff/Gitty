@@ -145,7 +145,8 @@
       "src/node_modules"
     ],
     "setupFiles": [
-      "./.erb/scripts/CheckBuildsExist.js"
+      "./.erb/scripts/CheckBuildsExist.js",
+      "jest-canvas-mock"
     ]
   },
   "devDependencies": {
@@ -252,6 +253,7 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "history": "^5.0.0",
+    "jest-canvas-mock": "^2.3.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
