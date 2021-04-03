@@ -1,5 +1,3 @@
-import { rejects } from "assert";
-
 const themeDefaults = {
     page_bg_color: "white",
     

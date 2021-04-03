@@ -1,5 +1,4 @@
-import { sign } from 'crypto';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { act } from 'react-dom/test-utils';
 import CommitTooltip from './commitTooltip';
 
@@ -18,9 +17,6 @@ const commitGraph = (props: CanvasProps) => {
 
   // store globalId for requestanimationFrames
   var animationRequestFrameId: number;
-
-  // commits are in state
-  const [processedCommits, setProcessedCommits] = useState({});
 
   // reference for the canvas dom element
   const canvasRef = useRef(null);
@@ -60,10 +56,10 @@ const commitGraph = (props: CanvasProps) => {
       });
 
     if (!canvasRef.current) {
-      return;
+      return undefined;
     }
-    const canvas: HTMLCanvasElement = canvasRef.current!;
 
+    const canvas: HTMLCanvasElement = canvasRef.current!;
     canvas.addEventListener('wheel', function(e){ 
 
       setTileSize((currentTileSize) => {
@@ -90,14 +86,14 @@ const commitGraph = (props: CanvasProps) => {
   useEffect(() => {
     //console.log('commits updated');
     if (!canvasRef.current) {
-      return;
+      return undefined;
     }
+
     const canvas: HTMLCanvasElement = canvasRef.current!;
     const ctx = canvas.getContext('2d')!;
 
     // get commits from props
     let commits: any = processCommits(props.commits);
-    setProcessedCommits(commits);
 
     // set first commit
     var firstCommitHash = leaf_nodes[0];
@@ -116,7 +112,7 @@ const commitGraph = (props: CanvasProps) => {
 
   useEffect(() => {
     if (!canvasRef.current) {
-      return;
+      return undefined;
     }
     const canvas: HTMLCanvasElement = canvasRef.current!;
     const ctx = canvas.getContext('2d')!;
@@ -288,7 +284,6 @@ const commitGraph = (props: CanvasProps) => {
       // if there are multiple parents, draw from left to right
       else if(parentCommits.length >= 2) {
         let branchCount = 0;
-        let previousParent = '';
         parentCommits.forEach((parentCommit: any) => {
           // first branch stays in the same x
           if(branchCount == 0) {
@@ -300,7 +295,6 @@ const commitGraph = (props: CanvasProps) => {
             populateGridRec(parentCommit, commits, ctx, nextX, y+1);
           }
           branchCount += 1;
-          previousParent = parentCommit;
         });
       }
     }
@@ -402,7 +396,6 @@ const commitGraph = (props: CanvasProps) => {
     author.split(' ').forEach((name: string) => {
       authorInitials += name.charAt(0);
     })
-    let textWidth = ctx.measureText(authorInitials).width;
     let textHeight = ctx.measureText(authorInitials).actualBoundingBoxAscent + ctx.measureText(authorInitials).actualBoundingBoxDescent;
     ctx.fillText(authorInitials, x + tileSize.width/2, y + tileSize.height/2 + textHeight/2);
 
@@ -452,7 +445,6 @@ const commitGraph = (props: CanvasProps) => {
     
     // look at each commit and see if it overlaps
     let hit = false;
-    let rowCounter = 0;
     grid.current.forEach(row => {
       for(var col in row) {
 
@@ -461,14 +453,7 @@ const commitGraph = (props: CanvasProps) => {
         if(x >= realPos.x && x <= (realPos.x + tileSize.width)
         && y >= realPos.y && y <= (realPos.y + tileSize.height)) {
           hit = true;
-          setProcessedCommits((processedCommits) => {
-            let currentCommit = processedCommits[row[col].hash];
-            setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
-            return processedCommits;
-          })
         }
-        rowCounter += 1;
-
       }
     });
 

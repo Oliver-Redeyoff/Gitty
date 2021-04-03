@@ -7,7 +7,6 @@ import './App.global.css';
 
 import SettingsIcon from './components/icons/settingsIcon';
 import FolderIcon from './components/icons/folderIcon';
-import { sign } from 'crypto';
 
 const themeManagerModule = require('./gittyThemes/themeManager');
 
@@ -102,7 +101,7 @@ const Main = () => {
           const fs = require('fs');
           const dirPath = response.filePaths[0];
           let isRepo = false;
-          fs.readdir(dirPath, (err, files) => {
+          fs.readdir(dirPath, (_, files) => {
               files.forEach(file => {
                 if(file == '.git'){
                   isRepo = true;
