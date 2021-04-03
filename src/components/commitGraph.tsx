@@ -75,12 +75,10 @@ const commitGraph = (props: CanvasProps) => {
 
     canvas.addEventListener('mousedown', mouseDownHandler);
 
-    //animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
-
   }, []);
 
   useEffect(() => {
-    //console.log('commits updated');
+    console.log('commits updated');
     if (!canvasRef.current) {
       return;
     }
@@ -99,7 +97,10 @@ const commitGraph = (props: CanvasProps) => {
     populateGridRec(firstCommitHash, commits, ctx, 0, 0);
 
     cancelAnimationFrame(animationRequestFrameId);
-    animationRequestFrameId = requestAnimationFrame(() => drawGraph(ctx));
+    animationRequestFrameId = requestAnimationFrame(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawGraph(ctx);
+    });
 
   }, [props.commits]);
 
