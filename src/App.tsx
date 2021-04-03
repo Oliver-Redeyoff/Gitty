@@ -7,6 +7,7 @@ import './App.global.css';
 
 import SettingsIcon from './components/icons/settingsIcon';
 import FolderIcon from './components/icons/folderIcon';
+import { sign } from 'crypto';
 
 const themeManagerModule = require('./gittyThemes/themeManager');
 
@@ -20,9 +21,12 @@ const Main = () => {
 
   useEffect(() => {
 
+    let abortController = new AbortController();
+    let signal = abortController.signal;
+
     // get theme
     let themeManager = new themeManagerModule();
-    themeManager.init()
+    themeManager.init(signal)
       .then((theme: any) => {setGittyTheme(theme)});
 
     setCommitGraphContainerSize((currentSize) => {
@@ -40,6 +44,8 @@ const Main = () => {
         return newCommitGraphContainerSize;
       })
     })
+
+    return (abortController.abort);
 
   }, []);
 

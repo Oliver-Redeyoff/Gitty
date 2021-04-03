@@ -1,3 +1,5 @@
+import { rejects } from "assert";
+
 const themeDefaults = {
     page_bg_color: "white",
     
@@ -22,11 +24,14 @@ const themeDefaults = {
 
 function themeManager() {
 
-    this.init = function() {
-        return new Promise(resolve => {
+    this.init = function(signal: AbortSignal) {
+        return new Promise((resolve, reject) => {
             getTheme().then((res: any) => {
                 resolve(res);
             })
+            signal.addEventListener('abort',() => {
+                reject('error');
+            });
         })
     }
 

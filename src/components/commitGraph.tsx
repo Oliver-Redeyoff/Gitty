@@ -46,10 +46,13 @@ const commitGraph = (props: CanvasProps) => {
   // Reload logic //
   //////////////////
   useEffect(() => { 
+
+    let abortController = new AbortController();
+    let signal = abortController.signal;
     
     // get theme
     let themeManager = new themeManagerModule();
-    themeManager.init()
+    themeManager.init(signal)
       .then((theme: any) => {
         act(() => {
           setTheme(theme)
@@ -80,12 +83,12 @@ const commitGraph = (props: CanvasProps) => {
 
     canvas.addEventListener('mousedown', mouseDownHandler);
 
-    return theme;
+    return (abortController.abort);
 
   }, []);
 
   useEffect(() => {
-    console.log('commits updated');
+    //console.log('commits updated');
     if (!canvasRef.current) {
       return;
     }
