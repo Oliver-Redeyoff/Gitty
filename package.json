@@ -1,13 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Fast Refresh for rapid application development",
+  "name": "gitty",
+  "productName": "Gitty",
+  "description": "App to make working with git easier.",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.babel.js",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
-    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
     "package": "rm -rf src/dist && yarn build && electron-builder build --publish never",
     "postinstall": "node -r @babel/register .erb/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
@@ -15,23 +14,9 @@
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
     "test": "jest --silent"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache"
-    ],
-    "{*.json,.{babelrc,eslintrc,prettierrc}}": [
-      "prettier --ignore-path .eslintignore --parser json --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ],
-    "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ]
-  },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Gitty",
+    "appId": "org.erb.Gitty",
     "files": [
       "dist/",
       "node_modules/",
@@ -86,37 +71,34 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "Oliver-Redeyoff",
+      "repo": "Gitty"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/Oliver-Redeyoff/Gitty.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "Oliver Redeyoff",
+    "email": "oliver.redeyoff@gmail.com",
+    "url": "https://www.oliverredeyoff.com"
   },
   "contributors": [
     {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    },
-    {
-      "name": "John Tran",
-      "email": "jptran318@gmail.com",
-      "url": "https://github.com/jooohhn"
+      "name": "Oliver Redeyoff",
+      "email": "oliver.redeyoff@gmail.com",
+      "url": "https://github.com/Oliver-Redeyoff"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+    "url": "https://github.com/Oliver-Redeyoff"
   },
   "keywords": [
     "electron",
+    "git",
+    "github",
     "boilerplate",
     "react",
     "typescript",
@@ -126,7 +108,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/Oliver-Redeyoff/Gitty",
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
@@ -187,9 +169,6 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/react-test-renderer": "^16.9.3",
     "@types/webpack-env": "^1.15.2",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-dev-expression": "^0.2.2",
@@ -210,29 +189,14 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.3",
     "enzyme-to-json": "^3.5.0",
-    "eslint": "^7.5.0",
-    "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-airbnb-typescript": "^12.0.0",
-    "eslint-config-erb": "^2.0.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-import-resolver-webpack": "^0.13.0",
-    "eslint-plugin-compat": "^3.8.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^24.1.3",
-    "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-hooks": "^4.0.8",
     "file-loader": "^6.0.0",
     "husky": "^4.2.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.1.0",
-    "lint-staged": "^10.2.11",
+    "jest-canvas-mock": "^2.3.1",
     "mini-css-extract-plugin": "^1.3.1",
     "node-sass": "^5.0.0",
     "opencollective-postinstall": "^2.0.3",
-    "prettier": "^2.0.5",
     "react-refresh": "^0.9.0",
     "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.0",
@@ -253,7 +217,6 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "history": "^5.0.0",
-    "jest-canvas-mock": "^2.3.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -270,21 +233,6 @@
     "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "browserslist": [],
-  "prettier": {
-    "overrides": [
-      {
-        "files": [
-          ".prettierrc",
-          ".babelrc",
-          ".eslintrc"
-        ],
-        "options": {
-          "parser": "json"
-        }
-      }
-    ],
-    "singleQuote": true
-  },
   "renovate": {
     "extends": [
       "bliss"
