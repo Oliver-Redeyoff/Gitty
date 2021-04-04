@@ -8,7 +8,7 @@ import './App.global.css';
 import SettingsIcon from './components/icons/settingsIcon';
 import FolderIcon from './components/icons/folderIcon';
 
-const themeManagerModule = require('./gittyThemes/themeManager');
+const { themeManagerModule } = require('./gittyThemes/configManager');
 
 const Main = () => {
 

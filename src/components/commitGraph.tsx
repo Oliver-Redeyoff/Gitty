@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { act } from 'react-dom/test-utils';
 import CommitTooltip from './commitTooltip';
 
-var themeManagerModule = require('../gittyThemes/themeManager');
+var { themeManagerModule } = require('../gittyThemes/configManager');
 
 interface CanvasProps {
   commits: any;
@@ -20,6 +20,9 @@ const commitGraph = (props: CanvasProps) => {
 
   // reference for the canvas dom element
   const canvasRef = useRef(null);
+
+  // processed commits
+  const [processedCommits, setProcessedCommits] = useState({});
 
   // canvas is a grid divided into tiles
   const grid = useRef([{}]);
@@ -94,6 +97,7 @@ const commitGraph = (props: CanvasProps) => {
 
     // get commits from props
     let commits: any = processCommits(props.commits);
+    setProcessedCommits(commits);
 
     // set first commit
     var firstCommitHash = leaf_nodes[0];
@@ -453,6 +457,9 @@ const commitGraph = (props: CanvasProps) => {
         if(x >= realPos.x && x <= (realPos.x + tileSize.width)
         && y >= realPos.y && y <= (realPos.y + tileSize.height)) {
           hit = true;
+          let currentCommit = processedCommits[row[col].hash];
+          setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
+          return processedCommits;
         }
       }
     });

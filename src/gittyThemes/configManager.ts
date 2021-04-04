@@ -1,3 +1,5 @@
+const electron = require('electron');
+
 const themeDefaults = {
     page_bg_color: "white",
     
@@ -73,4 +75,6 @@ function getTheme() {
 
 }
 
-module.exports = themeManager;
+module.exports = {
+    themeManagerModule: themeManager
+};
