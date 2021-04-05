@@ -68,51 +68,57 @@ export async function getTheme(signal: AbortSignal) {
 
 
 export function getConfig() {
-    const configFilePath = electron.remote.app.getPath('userData') + "/config.json";
-    let newConfig = {};
+    if(electron.remote) {
+        const configFilePath = electron.remote.app.getPath('userData') + "/config.json";
+        let newConfig = {};
 
-    // read the current config file
-    try {
-        let rawConfig = fs.readFileSync(configFilePath, 'utf8');
-        newConfig = JSON.parse(rawConfig);
-        // need to update config with any mising defaults
-    } catch(_) {}
+        // read the current config file
+        try {
+            let rawConfig = fs.readFileSync(configFilePath, 'utf8');
+            newConfig = JSON.parse(rawConfig);
+            // need to update config with any mising defaults
+        } catch(_) {}
 
-    // add any missing config elements
-    let configDefaultKeys = Object.keys(configDefaults);
-    configDefaultKeys.forEach((configDefaultKey: any) => {
-        if(!newConfig.hasOwnProperty(configDefaultKey)) {
-            newConfig[configDefaultKey] = configDefaults[configDefaultKey];
-        }
-    });
+        // add any missing config elements
+        let configDefaultKeys = Object.keys(configDefaults);
+        configDefaultKeys.forEach((configDefaultKey: any) => {
+            if(!newConfig.hasOwnProperty(configDefaultKey)) {
+                newConfig[configDefaultKey] = configDefaults[configDefaultKey];
+            }
+        });
 
-    fs.writeFile(configFilePath, JSON.stringify(newConfig), function (err) {
-        if (err) throw err;
-    });
+        fs.writeFile(configFilePath, JSON.stringify(newConfig), function (err) {
+            if (err) throw err;
+        });
 
-    return newConfig;
+        return newConfig;
+    }
+    return configDefaults;
 }
 
 
 export function setConfig(newConfigProperties) {
-    const configFilePath = electron.remote.app.getPath('userData') + "/config.json";
-    let config = configDefaults;
+    if(electron.remote) {
+        const configFilePath = electron.remote.app.getPath('userData') + "/config.json";
+        let config = configDefaults;
 
-    // read the current config file
-    try {
-        let rawConfig = fs.readFileSync(configFilePath, 'utf8');
-        config = JSON.parse(rawConfig);
-        // need to update config with any mising defaults
-    } catch(_) {}
+        // read the current config file
+        try {
+            let rawConfig = fs.readFileSync(configFilePath, 'utf8');
+            config = JSON.parse(rawConfig);
+            // need to update config with any mising defaults
+        } catch(_) {}
 
-    let newConfigKeys = Object.keys(newConfigProperties);
-    newConfigKeys.forEach((newConfigKey: any) => {
-        config[newConfigKey] = newConfigProperties[newConfigKey];
-    });
+        let newConfigKeys = Object.keys(newConfigProperties);
+        newConfigKeys.forEach((newConfigKey: any) => {
+            config[newConfigKey] = newConfigProperties[newConfigKey];
+        });
 
-    fs.writeFile(configFilePath, JSON.stringify(config), function (err) {
-        if (err) throw err;
-    });
+        fs.writeFile(configFilePath, JSON.stringify(config), function (err) {
+            if (err) throw err;
+        });
 
-    return config;
+        return config;
+    }
+    return configDefaults;
 }
