@@ -8,7 +8,7 @@ import './App.global.css';
 import SettingsIcon from './components/icons/settingsIcon';
 import FolderIcon from './components/icons/folderIcon';
 
-const { themeManagerModule } = require('./gittyThemes/configManager');
+const { getTheme, getConfig, setConfig } = require('./components/configManager');
 
 const Main = () => {
 
@@ -24,8 +24,9 @@ const Main = () => {
     let signal = abortController.signal;
 
     // get theme
-    let themeManager = new themeManagerModule();
-    themeManager.init(signal)
+    let config = getConfig();
+    setCurrentRepo(config.repoPath ?? "");
+    getTheme(signal)
       .then((theme: any) => {setGittyTheme(theme)});
 
     setCommitGraphContainerSize((currentSize) => {
@@ -95,8 +96,6 @@ const Main = () => {
   const openRepoFinder = function() {
     remote.dialog.showOpenDialog({properties: ['openDirectory'] }).then(function (response) {
       if (!response.canceled) {
-        // need to check that the folder contains a .git folder
-
         new Promise(resolve =>{
           const fs = require('fs');
           const dirPath = response.filePaths[0];
@@ -112,11 +111,10 @@ const Main = () => {
         }).then((isRepo: boolean) => {
           if (isRepo) {
             setCurrentRepo(response.filePaths[0]);
+            setConfig({"repoPath": response.filePaths[0]});
           }
         })
 
-      } else {
-        console.log("no file selected");
       }
     });
   }

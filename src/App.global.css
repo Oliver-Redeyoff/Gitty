@@ -1,8 +1,16 @@
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 
+ 
  :root {
    --sidebar-width: 100px;
 
    /*colors*/
    --page-bg-color: 'transparent';
+
+   --loader-bg-color: #f3f3f3;
+   --loader-spinner-color: #3498db;
 
    --header-height: 60px;
    --header-bg-color: 'transparent';
@@ -37,6 +45,19 @@ body {
   top: 0;
   width: 100%;
   height: 30px;
+}
+
+.loader {
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+  border: 6px solid var(--loader-bg-color);
+  border-top: 6px solid var(--loader-spinner-color);
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+  z-index: 10;
 }
 
 

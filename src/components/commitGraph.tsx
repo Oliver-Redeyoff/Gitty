@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { act } from 'react-dom/test-utils';
 import CommitTooltip from './commitTooltip';
 
-var { themeManagerModule } = require('../gittyThemes/configManager');
+var { getTheme } = require('./configManager');
 
 interface CanvasProps {
   commits: any;
@@ -50,8 +50,7 @@ const commitGraph = (props: CanvasProps) => {
     let signal = abortController.signal;
     
     // get theme
-    let themeManager = new themeManagerModule();
-    themeManager.init(signal)
+    getTheme(signal)
       .then((theme: any) => {
         act(() => {
           setTheme(theme)
@@ -459,7 +458,6 @@ const commitGraph = (props: CanvasProps) => {
           hit = true;
           let currentCommit = processedCommits[row[col].hash];
           setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
-          return processedCommits;
         }
       }
     });
