@@ -1,15 +1,5 @@
-<p>
-  Cloned from Electron React Boilerplate which uses <a href="https://electron.atom.io/">Electron</a>, <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/reactjs/react-router">React Router</a>, <a href="https://webpack.github.io/docs/">Webpack</a> and <a href="https://www.npmjs.com/package/react-refresh">React Fast Refresh</a>.
-</p>
-
 ![Test](https://github.com/Oliver-Redeyoff/Gitty/workflows/Test/badge.svg)
 [![Publish](https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml/badge.svg)](https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml)
-
-<br>
-
-<div align="center">
-
-</div>
 
 ## Install
 
