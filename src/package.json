@@ -1,7 +1,7 @@
 {
   "name": "gittyapp",
   "productName": "Gitty",
-  "version": "2.3.0",
+  "version": "1.0.0",
   "description": "App to make working with git easier.",
   "main": "./main.prod.js",
   "author": {
