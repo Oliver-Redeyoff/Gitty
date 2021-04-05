@@ -1,8 +1,11 @@
 <div align="center">
-    ![Alt text](./gittyMedia/gittyBanner1200x400.png)
-
-    ![Test](https://github.com/Oliver-Redeyoff/Gitty/workflows/Test/badge.svg)
-    [![Publish](https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml/badge.svg)](https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml)
+    <img src="https://github.com/Oliver-Redeyoff/Gitty/blob/master/gittyMedia/gittyBanner1200x400.png?raw=true"></img>
+    <a href="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/test.yml">
+        <img src="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/test.yml/badge.svg"></img>
+    <a>
+    <a href="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml">
+        <img src="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml/badge.svg"></img>
+    <a>
 </div>
 
 ## Install
