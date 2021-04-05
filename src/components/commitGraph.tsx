@@ -1,19 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { act } from 'react-dom/test-utils';
 import CommitTooltip from './commitTooltip';
-
-var { getTheme } = require('./configManager');
 
 interface CanvasProps {
   commits: any;
   width: number;
   height: number;
+  theme: any;
 }
 
 const commitGraph = (props: CanvasProps) => {
-  
-  // gitty theme
-  const [theme, setTheme] = useState<any>({});
 
   // store globalId for requestanimationFrames
   var animationRequestFrameId: number;
@@ -46,17 +41,6 @@ const commitGraph = (props: CanvasProps) => {
   //////////////////
   useEffect(() => { 
 
-    let abortController = new AbortController();
-    let signal = abortController.signal;
-    
-    // get theme
-    getTheme(signal)
-      .then((theme: any) => {
-        act(() => {
-          setTheme(theme)
-        })
-      });
-
     if (!canvasRef.current) {
       return undefined;
     }
@@ -80,8 +64,6 @@ const commitGraph = (props: CanvasProps) => {
     })
 
     canvas.addEventListener('mousedown', mouseDownHandler);
-
-    return (abortController.abort);
 
   }, []);
 
@@ -386,12 +368,12 @@ const commitGraph = (props: CanvasProps) => {
     // draw circle to represent commit
     ctx.beginPath();
     ctx.arc(x + tileSize.width/2, y + tileSize.height/2, tileSize.height*0.4, 0, 2 * Math.PI);
-    ctx.fillStyle = theme.content_commit_bg_color;
+    ctx.fillStyle = props.theme.content_commit_bg_color;
     ctx.fill();
 
     let fontSize = tileSize.width*0.25;
     ctx.font = fontSize + "px Arial";
-    ctx.fillStyle = theme.content_commit_text_color;
+    ctx.fillStyle = props.theme.content_commit_text_color;
     ctx.textAlign = "center";
 
     // get authors initials
@@ -432,7 +414,7 @@ const commitGraph = (props: CanvasProps) => {
     ctx.beginPath();
     ctx.moveTo(xStart + tileSize.width/2, yStart + tileSize.height/2);
     ctx.lineTo(xEnd + tileSize.width/2, yEnd + tileSize.height/2);
-    ctx.strokeStyle = theme.content_commit_link_color;
+    ctx.strokeStyle = props.theme.content_commit_link_color;
     ctx.stroke();
 
   }
@@ -456,6 +438,10 @@ const commitGraph = (props: CanvasProps) => {
         if(x >= realPos.x && x <= (realPos.x + tileSize.width)
         && y >= realPos.y && y <= (realPos.y + tileSize.height)) {
           hit = true;
+          console.log(processedCommits)
+          setProcessedCommits((processedCommits) => {
+            return processedCommits;
+          })
           let currentCommit = processedCommits[row[col].hash];
           setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
         }

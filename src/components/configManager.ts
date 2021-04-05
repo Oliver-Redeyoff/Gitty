@@ -3,24 +3,67 @@ const fs = require('fs');
 const path = require('path');
 
 const themeDefaults = {
-    "page_bg_color": "white",
+    "default": {
+        "page_bg_color": "white",
+        
+        "header_height": "70px",
+        "header_bg_color": "black",
+        "header_bottom_border_color": "transparent",
+        "header_title_color": "white",
+        "header_title_bottom_border_color": "transparent",
+        "header_repo_icon_color": "black",
+        "header_repo_text_color": "white",
+        "header_repo_border_color": "white",
+
+        "sidebar_bg_color": "black",
+        "sidebar_border_color": "transparent",
+        "sidebar_item_color": "white",
+        "sidebar_item_bg_color": "grey",
+
+        "content_bg_color": "black",
+        "content_border_color": "transparent",
+        "content_commit_bg_color": "white",
+        "content_commit_text_color": "black",
+        "content_commit_link_color": "white"
+    },
+    "light": {
+        "page_bg_color": "white",
     
-    "header_height": "70px",
-    "header_bg_color": "black",
-    "header_bottom_border_color": "transparent",
-    "header_title_color": "white",
-    "header_title_bottom_border_color": "transparent",
+        "header_bg_color": "#f8f5f1",
+        "header_title_color": "#e9896a",
+        "header_repo_border_color": "#e9896a",
+        "header_repo_text_color": "#e9896a",
 
-    "sidebar_bg_color": "black",
-    "sidebar_border_color": "transparent",
-    "sidebar_item_color": "white",
-    "sidebar_item_bg_color": "grey",
+        "sidebar_bg_color": "#f8f5f1",
+        "sidebar_item_color": "#e9896a",
+        "sidebar_item_bg_color": "#edeae6",
 
-    "content_bg_color": "black",
-    "content_border_color": "transparent",
-    "content_commit_bg_color": "white",
-    "content_commit_text_color": "black",
-    "content_commit_link_color": "white"
+        "content_bg_color": "#f8f5f1",
+        "content_commit_bg_color": "#e9896a",
+        "content_commit_text_color": "white",
+        "content_commit_link_color": "black"
+    },
+    "dark": {
+        "page_bg_color": "#252525",
+    
+        "header_bg_color": "#252525",
+        "header_bottom_border_color": "#1f1f1f",
+        "header_title_color": "#e8e8e8",
+        "header_repo_border_color": "#e8e8e8",
+        "header_repo_text_color": "#e8e8e8",
+
+        "sidebar_bg_color": "#252525",
+        "sidebar_border_color": "#1f1f1f",
+        "sidebar_item_color": "#e8e8e8",
+        "sidebar_item_bg_color": "#6e7c7c",
+
+        "content_bg_color": "#252525",
+        "content_border_color": "#1f1f1f",
+        "content_commit_bg_color": "#435560",
+        "content_commit_text_color": "white",
+        "content_commit_link_color": "black"
+    }
+
 }
 
 const configDefaults = {
@@ -29,41 +72,38 @@ const configDefaults = {
 }
 
 
-export async function getTheme(signal: AbortSignal) {
-    return new Promise((resolve, reject) => {
+export function getTheme(theme: string, signal: AbortSignal) {
 
-        signal.addEventListener('abort',() => {
-            reject('error');
-        });
+    let themeData = {};
 
-        const themesPath = __dirname + '/gittyThemes';
-        let currentThemeFile = 'gruvbox.json';
-        let themeData = {};
+    signal.addEventListener('abort',() => {
+        return;
+    });
 
-        // get current theme data
-        fs.readdir(themesPath, (_: any, files: any) => {
-            
-            if(files != null) {
-                files.forEach(file => {
-                    if(currentThemeFile == file) {
-                        let rawdata = fs.readFileSync(path.resolve(themesPath, file));
-                        themeData = JSON.parse(rawdata);
-                    }
-                });
-            }
+    if(themeDefaults[theme]) {
+        themeData = themeDefaults[theme];
+    } else {
+        const themePath = electron.remote.app.getPath('userData') + '/gittyThemes' + theme + '.json';
+        try {
+            let rawData = fs.readFileSync(themePath, 'utf8');
+            themeData = JSON.parse(rawData);
+        } catch(_) {}
+    }
 
-            // file in missing values
-            let colorList = Object.keys(themeDefaults);
-            colorList.forEach((color: any) => {
-                if(!themeData.hasOwnProperty(color)) {
-                    themeData[color] = themeDefaults[color];
-                }
-            })
+    if(Object.keys(themeData).length == 0) {
+        themeData = themeDefaults["light"];
+    }
 
-            resolve(themeData);
-
-        });
+    // file in missing values
+    let colorList = Object.keys(themeDefaults["default"]);
+    colorList.forEach((color: any) => {
+        if(!themeData.hasOwnProperty(color)) {
+            themeData[color] = themeDefaults["default"][color];
+        }
     })
+
+    return themeData;
+
 }
 
 
@@ -102,11 +142,9 @@ export function setConfig(newConfigProperties) {
         const configFilePath = electron.remote.app.getPath('userData') + "/config.json";
         let config = configDefaults;
 
-        // read the current config file
         try {
             let rawConfig = fs.readFileSync(configFilePath, 'utf8');
             config = JSON.parse(rawConfig);
-            // need to update config with any mising defaults
         } catch(_) {}
 
         let newConfigKeys = Object.keys(newConfigProperties);

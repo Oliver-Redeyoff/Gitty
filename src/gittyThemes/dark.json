@@ -4,6 +4,8 @@
     "header_bg_color": "#252525",
     "header_bottom_border_color": "#1f1f1f",
     "header_title_color": "#e8e8e8",
+    "header_repo_border_color": "#e8e8e8",
+    "header_repo_text_color": "#e8e8e8",
 
     "sidebar_bg_color": "#252525",
     "sidebar_border_color": "#1f1f1f",

@@ -3,6 +3,8 @@
     
     "header_bg_color": "#f8f5f1",
     "header_title_color": "#e9896a",
+    "header_repo_border_color": "#e9896a",
+    "header_repo_text_color": "#e9896a",
 
     "sidebar_bg_color": "#f8f5f1",
     "sidebar_item_color": "#e9896a",

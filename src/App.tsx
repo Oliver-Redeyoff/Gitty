@@ -5,6 +5,7 @@ import simpleGit, {SimpleGit} from 'simple-git';
 import CommitGraph from './components/commitGraph';
 import './App.global.css';
 
+import GittyIcon from './components/icons/gittyIcon';
 import SettingsIcon from './components/icons/settingsIcon';
 import FolderIcon from './components/icons/folderIcon';
 
@@ -14,8 +15,10 @@ const Main = () => {
 
   // commit graph container ref
   const canvasContainerRef = useRef(null);
+  const [showCoverScreen, setShowCoverScreen] = useState(true);
   const [commits, setCommits] = useState([]);
   const [currentRepo, setCurrentRepo] = useState("");
+  const [theme, setTheme] = useState({});
   const [commitGraphContainerSize, setCommitGraphContainerSize] = useState({width: 0, height: 0});
 
   useEffect(() => {
@@ -26,8 +29,8 @@ const Main = () => {
     // get theme
     let config = getConfig();
     setCurrentRepo(config.repoPath ?? "");
-    getTheme(signal)
-      .then((theme: any) => {setGittyTheme(theme)});
+
+    setGittyTheme(getTheme(config["theme"], signal));
 
     setCommitGraphContainerSize((currentSize) => {
       let newCommitGraphContainerSize = {...currentSize};
@@ -45,6 +48,8 @@ const Main = () => {
       })
     })
 
+    setTimeout(() => setShowCoverScreen(false), 2000);
+
     return (abortController.abort);
 
   }, []);
@@ -56,6 +61,7 @@ const Main = () => {
       // get current branch
       // git.status()
       //   .then((res:any) => {this.setState({current: res.current})});
+
       git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
         .then((res:any) => {setCommits(res.all)});
     }
@@ -72,16 +78,21 @@ const Main = () => {
 
 
   const setGittyTheme = function(theme) {
+
+    setTheme(theme);
+
     if (document != null) {
       let root = document.documentElement;
       root.style.setProperty('--page-bg-color', theme.page_bg_color);
 
       root.style.setProperty('--header-height', theme.header_height);
       root.style.setProperty('--header-bg-color', theme.header_bg_color);
-
       root.style.setProperty('--header-title-color', theme.header_title_color);
       root.style.setProperty('--header-title-bottom-border-color', theme.header_title_bottom_border_color);
       root.style.setProperty('--header-bottom-border-color', theme.header_bottom_border_color);
+      root.style.setProperty('--header-repo-icon-color', theme.header_repo_icon_color);
+      root.style.setProperty('--header-repo-text-color', theme.header_repo_text_color);
+      root.style.setProperty('--header-repo-border-color', theme.header_repo_border_color);
 
       root.style.setProperty('--sidebar-bg-color', theme.sidebar_bg_color);
       root.style.setProperty('--sidebar-border-color', theme.sidebar_border_color);
@@ -128,6 +139,10 @@ const Main = () => {
   return(
     <>
 
+      { showCoverScreen ? <div className="cover-screen">
+        <GittyIcon></GittyIcon>
+      </div> : <div className="fade-present"></div> }
+
       <div className="header">
         <h1>Gitty</h1>
         <div className="repoSelector" onClick={openRepoFinder}>
@@ -158,7 +173,7 @@ const Main = () => {
 
         <div className="contentContainer">
           <div ref={canvasContainerRef} className="commitGraphContainer">
-            <CommitGraph commits={commits} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>
+            <CommitGraph commits={commits} theme={theme} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>
           </div>
         </div>
       </div>
