@@ -1,4 +1,4 @@
-![Alt text](./gittyMedia/gittyBanner.png)
+![Alt text](./gittyMedia/gittyBanner1200x400.png)
 
 ![Test](https://github.com/Oliver-Redeyoff/Gitty/workflows/Test/badge.svg)
 [![Publish](https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml/badge.svg)](https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml)
