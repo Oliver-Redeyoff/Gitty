@@ -7,6 +7,11 @@
         <img src="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml/badge.svg"></img>
     <a>
 </div>
+<br/>
+
+## About
+
+Gitty is a graphical user interface for git, usefull for visualising your commit history and easily performing git actions.
 
 ## Install
 
@@ -24,12 +29,4 @@ Start the app in the `dev` environment:
 
 ```bash
 yarn start
-```
-
-## Packaging for Production
-
-To package apps for the local platform:
-
-```bash
-yarn package
 ```
