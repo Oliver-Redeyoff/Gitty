@@ -83,7 +83,7 @@ export function getTheme(theme: string, signal: AbortSignal) {
     if(themeDefaults[theme]) {
         themeData = themeDefaults[theme];
     } else {
-        const themePath = electron.remote.app.getPath('userData') + '/gittyThemes' + theme + '.json';
+        const themePath = electron.remote.app.getPath('userData') + '/gittyThemes/' + theme + '.json';
         try {
             let rawData = fs.readFileSync(themePath, 'utf8');
             themeData = JSON.parse(rawData);
