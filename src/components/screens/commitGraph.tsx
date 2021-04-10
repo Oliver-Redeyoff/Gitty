@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import CommitTooltip from './commitTooltip';
+import CommitTooltip from '../tools/commitTooltip';
 
 interface CanvasProps {
   commits: any;
@@ -29,8 +29,8 @@ const commitGraph = (props: CanvasProps) => {
   var leaf_nodes: any;
 
   // stores x and y pos of mouse when dragging
-  let x = 0;
-  let y = 0;
+  let x: number = 0;
+  let y: number = 0;
 
   // stores x and y pos of tooltip in state
   const [tooltipData, setTooltipData] = useState({visible: false, x: 0, y: 0, hash: '', author: '', date: ''});
@@ -440,10 +440,10 @@ const commitGraph = (props: CanvasProps) => {
           hit = true;
           console.log(processedCommits)
           setProcessedCommits((processedCommits) => {
+            let currentCommit = processedCommits[row[col].hash];
+            setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
             return processedCommits;
           })
-          let currentCommit = processedCommits[row[col].hash];
-          setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});
         }
       }
     });

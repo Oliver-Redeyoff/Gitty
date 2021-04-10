@@ -2,12 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 const remote = require("electron").remote;
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import simpleGit, {SimpleGit} from 'simple-git';
-import CommitGraph from './components/commitGraph';
+import CommitGraph from './components/screens/commitGraph';
 import './App.global.css';
 
 import GittyIcon from './components/icons/gittyIcon';
-import SettingsIcon from './components/icons/settingsIcon';
 import FolderIcon from './components/icons/folderIcon';
+
+import GraphIcon from './components/icons/graphIcon';
+import HistoryIcon from './components/icons/historyIcon';
+import DifferenceIcon from './components/icons/differenceIcon';
+import BranchesIcon from './components/icons/branchIcon';
+import TerminalIcon from './components/icons/terminalIcon';
+import SettingsIcon from './components/icons/settingsIcon';
 
 const { getTheme, getConfig, setConfig } = require('./components/configManager');
 
@@ -16,6 +22,8 @@ const Main = () => {
   // commit graph container ref
   const canvasContainerRef = useRef(null);
   const [showCoverScreen, setShowCoverScreen] = useState(true);
+  const [tab, setTab] = useState(0);
+
   const [commits, setCommits] = useState([]);
   const [currentRepo, setCurrentRepo] = useState("");
   const [theme, setTheme] = useState({});
@@ -104,6 +112,13 @@ const Main = () => {
     }
   }
 
+  const renderTab = function() {
+    switch(tab) {
+      case 0:
+        return (<CommitGraph commits={commits} theme={theme} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>)
+    }
+  }
+
   const openRepoFinder = function() {
     remote.dialog.showOpenDialog({properties: ['openDirectory'] }).then(function (response) {
       if (!response.canceled) {
@@ -158,22 +173,18 @@ const Main = () => {
       <div className="all">
         <div className="sidebarContainer">
           <div className="sidebar">
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
-            <div className="sidebar-slot"><SettingsIcon></SettingsIcon></div>
+            <div className={"sidebar-slot" + (tab==0 ? " active" : "")} onClick={() => setTab(0)}><GraphIcon></GraphIcon></div>
+            <div className="sidebar-slot" onClick={() => setTab(1)}><HistoryIcon></HistoryIcon></div>
+            <div className="sidebar-slot" onClick={() => setTab(2)}><DifferenceIcon></DifferenceIcon></div>
+            <div className="sidebar-slot" onClick={() => setTab(3)}><BranchesIcon></BranchesIcon></div>
+            <div className="sidebar-slot" onClick={() => setTab(4)}><TerminalIcon></TerminalIcon></div>
+            <div className="sidebar-slot" onClick={() => setTab(5)}><SettingsIcon></SettingsIcon></div>
           </div>
         </div>
 
         <div className="contentContainer">
           <div ref={canvasContainerRef} className="commitGraphContainer">
-            <CommitGraph commits={commits} theme={theme} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>
+            {renderTab()}
           </div>
         </div>
       </div>
