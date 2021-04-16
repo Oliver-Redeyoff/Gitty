@@ -2,8 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 const remote = require("electron").remote;
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import simpleGit, {SimpleGit} from 'simple-git';
-import CommitGraph from './components/screens/commitGraph';
-import './App.global.css';
+import './styles/App.global.css';
+
+import CommitGraphScreen from './components/screens/commitGraphScreen';
+import CommitHistoryScreen from './components/screens/commitHistoryScreen';
+import FileDiffScreen from './components/screens/fileDiffScreen';
+import BranchesScreen from './components/screens/branchesScreen';
+import TerminalScreen from './components/screens/terminalScreen';
+import SettingsScreen from './components/screens/settingsScreen';
 
 import GittyIcon from './components/icons/gittyIcon';
 import FolderIcon from './components/icons/folderIcon';
@@ -56,7 +62,7 @@ const Main = () => {
       })
     })
 
-    setTimeout(() => setShowCoverScreen(false), 2000);
+    setTimeout(() => setShowCoverScreen(false), 500);
 
     return (abortController.abort);
 
@@ -115,7 +121,19 @@ const Main = () => {
   const renderTab = function() {
     switch(tab) {
       case 0:
-        return (<CommitGraph commits={commits} theme={theme} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraph>)
+        return (<CommitGraphScreen commits={commits} theme={theme} width={commitGraphContainerSize.width} height={commitGraphContainerSize.height}></CommitGraphScreen>)
+      case 1:
+        return (<CommitHistoryScreen></CommitHistoryScreen>)
+      case 2:
+        return (<FileDiffScreen></FileDiffScreen>)
+      case 3:
+        return (<BranchesScreen></BranchesScreen>)
+      case 4:
+        return (<TerminalScreen></TerminalScreen>)
+      case 5:
+        return (<SettingsScreen></SettingsScreen>)
+      default:
+        return (<h1>This shouldn't show, what are you doing here?</h1>)
     }
   }
 
@@ -174,11 +192,11 @@ const Main = () => {
         <div className="sidebarContainer">
           <div className="sidebar">
             <div className={"sidebar-slot" + (tab==0 ? " active" : "")} onClick={() => setTab(0)}><GraphIcon></GraphIcon></div>
-            <div className="sidebar-slot" onClick={() => setTab(1)}><HistoryIcon></HistoryIcon></div>
-            <div className="sidebar-slot" onClick={() => setTab(2)}><DifferenceIcon></DifferenceIcon></div>
-            <div className="sidebar-slot" onClick={() => setTab(3)}><BranchesIcon></BranchesIcon></div>
-            <div className="sidebar-slot" onClick={() => setTab(4)}><TerminalIcon></TerminalIcon></div>
-            <div className="sidebar-slot" onClick={() => setTab(5)}><SettingsIcon></SettingsIcon></div>
+            <div className={"sidebar-slot" + (tab==1 ? " active" : "")} onClick={() => setTab(1)}><HistoryIcon></HistoryIcon></div>
+            <div className={"sidebar-slot" + (tab==2 ? " active" : "")} onClick={() => setTab(2)}><DifferenceIcon></DifferenceIcon></div>
+            <div className={"sidebar-slot" + (tab==3 ? " active" : "")} onClick={() => setTab(3)}><BranchesIcon></BranchesIcon></div>
+            <div className={"sidebar-slot" + (tab==4 ? " active" : "")} onClick={() => setTab(4)}><TerminalIcon></TerminalIcon></div>
+            <div className={"sidebar-slot" + (tab==5 ? " active" : "")} onClick={() => setTab(5)}><SettingsIcon></SettingsIcon></div>
           </div>
         </div>
 

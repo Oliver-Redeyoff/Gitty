@@ -8,7 +8,7 @@ interface CanvasProps {
   theme: any;
 }
 
-const commitGraph = (props: CanvasProps) => {
+const commitGraphScreen = (props: CanvasProps) => {
 
   // store globalId for requestanimationFrames
   var animationRequestFrameId: number;
@@ -466,4 +466,4 @@ const commitGraph = (props: CanvasProps) => {
   );
 }
 
-export default commitGraph;
+export default commitGraphScreen;

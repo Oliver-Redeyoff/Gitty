@@ -222,7 +222,7 @@ body {
   overflow: hidden;
   background-color: var(--sidebar-bg-color);
   border-radius: 10px;
-  border: 1.5px solid var(--sidebar-border-color);
+  border: 1px solid var(--sidebar-border-color);
   transition: all 0.4s;
 }
 
@@ -236,7 +236,7 @@ body {
   cursor: pointer;
 }
 .sidebar-slot.active {
-  filter: opacity(1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .sidebar-slot:last-of-type {
   border-bottom: none;
