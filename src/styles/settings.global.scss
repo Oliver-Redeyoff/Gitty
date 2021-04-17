@@ -1,5 +1,6 @@
 .settings-screen{
     padding: 30px;
+    color: var(--content-text-color);
 
     h1 {
         margin: 0px 0px 50px 0px;
@@ -26,11 +27,15 @@
         }
 
         .value {
-            .selected-scheme {
+            .theme-box {
+                display: inline-block;
+                margin-left: 15px;
+                margin-bottom: 15px;
                 padding: 5px 10px;
                 border-radius: 5px;
-                background-color: white;
-                color: black;
+                border: 1px solid var(--content-border-color);
+                font-weight: 600;
+                cursor: pointer;
             }
         }
 

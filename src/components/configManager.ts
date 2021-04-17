@@ -22,6 +22,7 @@ const themeDefaults = {
 
         "content_bg_color": "black",
         "content_border_color": "transparent",
+        "content_text_color": "white",
         "content_commit_bg_color": "white",
         "content_commit_text_color": "black",
         "content_commit_link_color": "white"
@@ -39,6 +40,7 @@ const themeDefaults = {
         "sidebar_item_bg_color": "#edeae6",
 
         "content_bg_color": "#f8f5f1",
+        "content_text_color": "black",
         "content_commit_bg_color": "#e9896a",
         "content_commit_text_color": "white",
         "content_commit_link_color": "black"
@@ -72,18 +74,15 @@ const configDefaults = {
 }
 
 
-export function getTheme(theme: string, signal: AbortSignal) {
+export function getTheme(theme: string) {
 
     let themeData = {};
-
-    signal.addEventListener('abort',() => {
-        return;
-    });
 
     if(themeDefaults[theme]) {
         themeData = themeDefaults[theme];
     } else {
         const themePath = electron.remote.app.getPath('userData') + '/gittyThemes/' + theme + '.json';
+        console.log(themePath)
         try {
             let rawData = fs.readFileSync(themePath, 'utf8');
             themeData = JSON.parse(rawData);
@@ -104,6 +103,55 @@ export function getTheme(theme: string, signal: AbortSignal) {
 
     return themeData;
 
+}
+
+export function getAvailableThemes() {
+    let themes = [];
+    const themesDirPath = electron.remote.app.getPath('userData') + '/gittyThemes/';
+
+    // add default themes
+    Object.keys(themeDefaults).forEach((key: string) => {
+        if(key != "default") {
+            themes.push({
+                name: key,
+                color1: themeDefaults[key]["header_bg_color"] ?? themeDefaults["default"]["header_bg_color"],
+                color2: themeDefaults[key]["header_title_color"] ?? themeDefaults["default"]["header_title_color"]
+            })
+        }
+    })
+
+    // add themes that are in themes folder
+    let themeFiles = fs.readdirSync(themesDirPath);
+    console.log(themeFiles);
+
+    themeFiles.forEach(file => {
+        try {
+            let rawData = fs.readFileSync(themesDirPath + file, 'utf8');
+            let jsonData = JSON.parse(rawData);
+            console.log(jsonData)
+            themes.push({
+                name: file.split('.')[0],
+                color1: jsonData["header_bg_color"] ?? themeDefaults["default"]["header_bg_color"],
+                color2: jsonData["header_title_color"] ?? themeDefaults["default"]["header_title_color"]
+            })
+        } catch(_) {}
+    });
+
+    // fs.readdir(themesDirPath, (_, files) => {
+    //     files.forEach(file => {
+    //         try {
+    //             let rawData = fs.readFileSync(themesDirPath + file, 'utf8');
+    //             let jsonData = JSON.parse(rawData);
+    //             themes.push({
+    //                 name: file.split('.')[0],
+    //                 color1: jsonData["header_bg_color"] ?? themeDefaults["default"]["header_bg_color"],
+    //                 color2: jsonData["header_title_color"] ?? themeDefaults["default"]["header_title_color"]
+    //             })
+    //         } catch(_) {}
+    //     });
+    // });
+
+    return themes;
 }
 
 

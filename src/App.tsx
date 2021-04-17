@@ -44,7 +44,7 @@ const Main = () => {
     let config = getConfig();
     setCurrentRepo(config.repoPath ?? "");
 
-    setGittyTheme(getTheme(config["theme"], signal));
+    setGittyTheme(config["theme"]);
 
     setCommitGraphContainerSize((currentSize) => {
       let newCommitGraphContainerSize = {...currentSize};
@@ -91,7 +91,11 @@ const Main = () => {
   }, [commits, canvasContainerRef])
 
 
-  const setGittyTheme = function(theme) {
+  const setGittyTheme = function(themeName) {
+
+    let theme = getTheme(themeName);
+
+    setConfig({"theme": themeName})
 
     setTheme(theme);
 
@@ -115,6 +119,7 @@ const Main = () => {
       
       root.style.setProperty('--content-bg-color', theme.content_bg_color);
       root.style.setProperty('--content-border-color', theme.content_border_color);
+      root.style.setProperty('--content-text-color', theme.content_text_color);
     }
   }
 
@@ -131,7 +136,7 @@ const Main = () => {
       case 4:
         return (<TerminalScreen></TerminalScreen>)
       case 5:
-        return (<SettingsScreen></SettingsScreen>)
+        return (<SettingsScreen updateTheme={setGittyTheme}></SettingsScreen>)
       default:
         return (<h1>This shouldn't show, what are you doing here?</h1>)
     }
