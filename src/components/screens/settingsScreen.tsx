@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/settings.global.scss';
-const { getAvailableThemes, setConfig } = require('../configManager');
+const { getAvailableThemes } = require('../configManager');
 
 interface settingsProps {
     updateTheme: any

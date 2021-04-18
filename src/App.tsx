@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 const remote = require("electron").remote;
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import simpleGit, {SimpleGit} from 'simple-git';
@@ -38,9 +38,6 @@ const Main = () => {
 
   useEffect(() => {
 
-    let abortController = new AbortController();
-    let signal = abortController.signal;
-
     // get theme
     let config = getConfig();
     setCurrentRepo(config.repoPath ?? "");
@@ -64,8 +61,6 @@ const Main = () => {
     })
 
     setTimeout(() => setShowCoverScreen(false), 500);
-
-    return (abortController.abort);
 
   }, []);
 

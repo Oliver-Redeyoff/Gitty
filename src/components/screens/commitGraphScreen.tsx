@@ -17,7 +17,7 @@ const commitGraphScreen = (props: CanvasProps) => {
   const canvasRef = useRef(null);
 
   // processed commits
-  const [processedCommits, setProcessedCommits] = useState({});
+  const [_, setProcessedCommits] = useState({});
 
   // canvas is a grid divided into tiles
   const grid = useRef([{}]);
