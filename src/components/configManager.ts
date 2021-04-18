@@ -5,6 +5,10 @@ const path = require('path');
 const themeDefaults = {
     "default": {
         "page_bg_color": "white",
+
+        "notification_bg_color": "black",
+        "notification_text_color": "white",
+        "notification_icon_color": "white",
         
         "header_height": "70px",
         "header_bg_color": "black",
@@ -29,6 +33,10 @@ const themeDefaults = {
     },
     "light": {
         "page_bg_color": "white",
+
+        "notification_bg_color": "white",
+        "notification_text_color": "rgba(0, 0, 0, 0.6)",
+        "notification_icon_color": "#e9896a",
     
         "header_bg_color": "#f8f5f1",
         "header_title_color": "#e9896a",
@@ -40,13 +48,17 @@ const themeDefaults = {
         "sidebar_item_bg_color": "#edeae6",
 
         "content_bg_color": "#f8f5f1",
-        "content_text_color": "black",
+        "content_text_color": "rgba(0, 0, 0, 0.7)",
         "content_commit_bg_color": "#e9896a",
         "content_commit_text_color": "white",
         "content_commit_link_color": "black"
     },
     "dark": {
         "page_bg_color": "#252525",
+
+        "notification_bg_color": "black",
+        "notification_text_color": "#e8e8e8",
+        "notification_icon_color": "#e8e8e8",
     
         "header_bg_color": "#252525",
         "header_bottom_border_color": "#1f1f1f",
@@ -85,7 +97,7 @@ export function getTheme(theme: string) {
         console.log(themePath)
         try {
             let rawData = fs.readFileSync(themePath, 'utf8');
-            themeData = JSON.parse(rawData);
+            themeData = JSON.parse(rawData);        
         } catch(_) {}
     }
 
@@ -164,8 +176,7 @@ export function getConfig() {
         try {
             let rawConfig = fs.readFileSync(configFilePath, 'utf8');
             newConfig = JSON.parse(rawConfig);
-            // need to update config with any mising defaults
-        } catch(_) {}
+        } catch(e) {console.log(e)}
 
         // add any missing config elements
         let configDefaultKeys = Object.keys(configDefaults);
@@ -200,9 +211,7 @@ export function setConfig(newConfigProperties) {
             config[newConfigKey] = newConfigProperties[newConfigKey];
         });
 
-        fs.writeFile(configFilePath, JSON.stringify(config), function (err) {
-            if (err) throw err;
-        });
+        fs.writeFileSync(configFilePath, JSON.stringify(config));
 
         return config;
     }

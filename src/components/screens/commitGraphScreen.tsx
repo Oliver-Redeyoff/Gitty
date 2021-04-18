@@ -438,7 +438,6 @@ const commitGraphScreen = (props: CanvasProps) => {
         if(x >= realPos.x && x <= (realPos.x + tileSize.width)
         && y >= realPos.y && y <= (realPos.y + tileSize.height)) {
           hit = true;
-          console.log(processedCommits)
           setProcessedCommits((processedCommits) => {
             let currentCommit = processedCommits[row[col].hash];
             setTooltipData({visible: true, x: e.pageX, y: e.pageY, hash: row[col].hash, author: currentCommit.authorName, date: currentCommit.authorDate});

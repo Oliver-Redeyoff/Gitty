@@ -12,12 +12,10 @@ const settingsScreen = (props: settingsProps) => {
 
     useEffect(() => {
         let availableThemes = getAvailableThemes();
-        console.log(availableThemes);
         setThemes(availableThemes);
     }, []);
 
     const setTheme = (themeName) => {
-        console.log(themeName);
         props.updateTheme(themeName);
     }
 
@@ -34,9 +32,8 @@ const settingsScreen = (props: settingsProps) => {
                     {themes.map((theme, index) => (
                         <div key={index} className="theme-box" onClick={() => setTheme(theme["name"])} style={{
                             color: theme["color2"], 
-                            backgroundColor: theme["color1"]}}>{theme["name"]}</div>
+                            backgroundColor: "rgba(0, 0, 0, 0.6)"}}>{theme["name"]}</div>
                     ))}
-                    {/* <div className="selected-scheme">Dark</div> */}
                 </div>
             </div>
 

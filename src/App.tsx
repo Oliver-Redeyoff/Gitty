@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 const remote = require("electron").remote;
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import simpleGit, {SimpleGit} from 'simple-git';
-import './styles/App.global.css';
+import './styles/App.global.scss';
 
 import CommitGraphScreen from './components/screens/commitGraphScreen';
 import CommitHistoryScreen from './components/screens/commitHistoryScreen';
@@ -29,6 +29,7 @@ const Main = () => {
   const canvasContainerRef = useRef(null);
   const [showCoverScreen, setShowCoverScreen] = useState(true);
   const [tab, setTab] = useState(0);
+  const [notify, setNotify] = useState({trigger: 0, title: ""});
 
   const [commits, setCommits] = useState([]);
   const [currentRepo, setCurrentRepo] = useState("");
@@ -44,7 +45,7 @@ const Main = () => {
     let config = getConfig();
     setCurrentRepo(config.repoPath ?? "");
 
-    setGittyTheme(config["theme"]);
+    setGittyTheme(config["theme"], false);
 
     setCommitGraphContainerSize((currentSize) => {
       let newCommitGraphContainerSize = {...currentSize};
@@ -91,7 +92,7 @@ const Main = () => {
   }, [commits, canvasContainerRef])
 
 
-  const setGittyTheme = function(themeName) {
+  const setGittyTheme = function(themeName, notify=true) {
 
     let theme = getTheme(themeName);
 
@@ -102,6 +103,10 @@ const Main = () => {
     if (document != null) {
       let root = document.documentElement;
       root.style.setProperty('--page-bg-color', theme.page_bg_color);
+
+      root.style.setProperty('--notification-bg-color', theme.notification_bg_color);
+      root.style.setProperty('--notification-text-color', theme.notification_text_color);
+      root.style.setProperty('--notification-icon-color', theme.notification_icon_color);
 
       root.style.setProperty('--header-height', theme.header_height);
       root.style.setProperty('--header-bg-color', theme.header_bg_color);
@@ -121,6 +126,11 @@ const Main = () => {
       root.style.setProperty('--content-border-color', theme.content_border_color);
       root.style.setProperty('--content-text-color', theme.content_text_color);
     }
+
+    if(notify) {
+      triggerNotification("Set theme to " + themeName);
+    }
+
   }
 
   const renderTab = function() {
@@ -161,6 +171,7 @@ const Main = () => {
           if (isRepo) {
             setCurrentRepo(response.filePaths[0]);
             setConfig({"repoPath": response.filePaths[0]});
+            triggerNotification("Updated repo path");
           }
         })
 
@@ -173,6 +184,10 @@ const Main = () => {
     return folders.pop();
   }
 
+  const triggerNotification = function(title: string){
+    setNotify({trigger: 1, title: title});
+  }
+
 
   return(
     <>
@@ -182,7 +197,7 @@ const Main = () => {
       </div> : <div className="fade-present"></div> }
 
       <div className="header">
-        <h1>Gitty</h1>
+        <h1 onClick={() => triggerNotification("Hello there")}>Gitty</h1>
         <div className="repoSelector" onClick={openRepoFinder}>
           <div className="leftCol">
             <FolderIcon></FolderIcon>
@@ -211,7 +226,16 @@ const Main = () => {
           </div>
         </div>
       </div>
-    
+
+      {/* Notification element */}
+      <div className={"notification-box" + (notify.trigger==1 ? " appear" : "")} onAnimationEnd={() => setNotify({...notify, trigger: 0})}>
+        <div className="left">
+          <GittyIcon></GittyIcon>
+        </div>
+        <div className="right">
+          {notify.title}
+        </div>
+      </div>
     </>
   );
   
