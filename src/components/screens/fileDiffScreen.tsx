@@ -25,7 +25,7 @@ const fillDiffScreen = (props: DiffProps) => {
     }, []);
 
     const getDiffData = (diffSummary) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             let tempDiffs = []
 
             for (const file of diffSummary.files) {
@@ -48,16 +48,20 @@ const fillDiffScreen = (props: DiffProps) => {
     return (
         <div style={{height: '100%', overflowY: 'scroll', padding: '20px'}}>
             <h1>Current changes</h1>
-            {diffs.map((diffgroup, groupIndex) => {
-                console.log(diffgroup)
-                return (<div key={groupIndex+1}>
-                    <h3>{diffgroup.name}</h3>
-                    {diffgroup.changes.map((diff, changeIndex) => {
-                        console.log(diff)
-                        return <SyntaxHighlighter key={(groupIndex+1)*(changeIndex+1)} language="javascript">{diff}</SyntaxHighlighter>
-                    })}
-                </div>)
-            })}
+            <div style={{marginBottom: "50px"}}>
+                {diffs.map((diffgroup, groupIndex) => {
+                    console.log(diffgroup)
+                    return (<div key={groupIndex+1} style={{backgroundColor: "rgba(0, 0, 0, 0.2)", padding: "10px", marginTop: "20px", boxSizing: "border-box"}}>
+                        <code>{diffgroup.name}</code>
+                        <span style={{float: "right", marginLeft: "15px", color: 'red'}}>Discard</span>
+                        <span style={{float: "right", color: 'green'}}>Commit</span>
+                        {diffgroup.changes.map((diff, changeIndex) => {
+                            console.log(diff)
+                            return <SyntaxHighlighter key={(groupIndex+1)*(changeIndex+1)} language="javascript">{diff}</SyntaxHighlighter>
+                        })}
+                    </div>)
+                })}
+            </div>
         </div>
     )
 }

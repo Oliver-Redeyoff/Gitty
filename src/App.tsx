@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 const remote = require("electron").remote;
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import simpleGit, {SimpleGit} from 'simple-git';
+import simpleGit from 'simple-git';
 import './styles/App.global.scss';
 
 import CommitGraphScreen from './components/screens/commitGraphScreen';
@@ -75,7 +75,7 @@ const Main = () => {
       // git.status()
       //   .then((res:any) => {this.setState({current: res.current})});
 
-      setSgit((current) => {
+      setSgit(() => {
         let temp = simpleGit(currentRepo, { binary: 'git' })
         temp.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
           .then((res:any) => {setCommits(res.all)});
