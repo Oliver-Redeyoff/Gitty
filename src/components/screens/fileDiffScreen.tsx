@@ -14,9 +14,6 @@ const fillDiffScreen = (props: DiffProps) => {
 
     useEffect(() => {
         if(props.sgit != null){
-            console.log('Mounting filediff');
-            // props.sgit.diff("package.json")
-            //     .then((res) => {setDiffs(res.split(diffSplitRegex))})
             props.sgit.diffSummary()
                 .then((res) => {
                     getDiffData(res).then((res2: any) => {setDiffs(res2)})

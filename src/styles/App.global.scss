@@ -202,6 +202,67 @@ h4 {
   padding: 10px 15px 10px 10px;
   border-bottom: 1.5px solid var(--header-title-bottom-border-color);
 }
+.header .headerIcon {
+  position: absolute;
+  height: 40%;
+  width: 100px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  transition: all 0.3s;
+
+  svg {
+    height: 100%;
+    .outline {
+      stroke: var(--header-title-color) !important;
+    }
+    .fill {
+      fill: var(--header-title-color) !important;
+    }
+  }
+
+  &.pushIcon {
+    left: 275px;
+    .arrow, .box {
+      transition: all 0.3s;
+    }
+    &:hover {
+      .arrow {
+        transform: translateY(-20%) scale(1.1) translateX(-5%) translateY(-5%);
+      }
+      .box {
+        transform: scale(0.9) translateX(5%) translateY(5%);
+      }
+    }
+  }
+  &.pullIcon {
+    left: 325px;
+    .arrow, .box {
+      transition: all 0.3s;
+    }
+    &:hover {
+      .arrow {
+        transform: translateY(20%) scale(1.1) translateX(-5%) translateY(-5%);
+      }
+      .box {
+        transform: scale(0.9) translateX(5%) translateY(5%);
+      }
+    }
+  }
+  &.fetchIcon {
+    left: 375px;
+    .arrow, .box {
+      transition: all 0.3s;
+    }
+    &:hover {
+      .arrow {
+        transform: translateY(20%) scale(1.1) translateX(-5%) translateY(-5%);
+      }
+      .box {
+        transform: scale(0.9) translateX(5%) translateY(5%);
+      }
+    }
+  }
+}
 .header .repoSelector {
   position: absolute;
   top: 50%;

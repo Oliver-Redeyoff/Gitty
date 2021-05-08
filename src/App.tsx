@@ -13,6 +13,9 @@ import SettingsScreen from './components/screens/settingsScreen';
 
 import GittyIcon from './components/icons/gittyIcon';
 import FolderIcon from './components/icons/folderIcon';
+import PushIcon from './components/icons/pushIcon';
+import PullIcon from './components/icons/pullIcon';
+import FetchIcon from './components/icons/fetchIcon';
 
 import GraphIcon from './components/icons/graphIcon';
 import HistoryIcon from './components/icons/historyIcon';
@@ -200,6 +203,10 @@ const Main = () => {
 
       <div className="header">
         <h1 onClick={() => triggerNotification("Hello there")}>Gitty</h1>
+        <div className="headerIcon pushIcon" title="Push"><PushIcon></PushIcon></div>
+        <div className="headerIcon pullIcon" title="Pull"><PullIcon></PullIcon></div>
+        <div className="headerIcon fetchIcon" title="Fetch"><FetchIcon></FetchIcon></div>
+
         <div className="repoSelector" onClick={openRepoFinder}>
           <div className="leftCol">
             <FolderIcon></FolderIcon>
