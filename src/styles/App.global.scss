@@ -205,8 +205,9 @@ h4 {
 .header .headerIcon {
   position: absolute;
   height: 40%;
-  width: 100px;
+  width: 50px;
   top: 50%;
+  text-align: center;
   transform: translateY(-50%) translateX(-50%);
   transition: all 0.3s;
 
@@ -221,7 +222,7 @@ h4 {
   }
 
   &.pushIcon {
-    left: 275px;
+    left: 250px;
     .arrow, .box {
       transition: all 0.3s;
     }
@@ -235,7 +236,7 @@ h4 {
     }
   }
   &.pullIcon {
-    left: 325px;
+    left: 300px;
     .arrow, .box {
       transition: all 0.3s;
     }
@@ -249,7 +250,7 @@ h4 {
     }
   }
   &.fetchIcon {
-    left: 375px;
+    left: 350px;
     .arrow, .box {
       transition: all 0.3s;
     }
