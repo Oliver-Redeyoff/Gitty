@@ -25,6 +25,9 @@ const { getTheme, getConfig, setConfig } = require('./components/configManager')
 
 const Main = () => {
 
+  // simple git instance
+  const [sgit, setSgit] = useState(null);
+
   // commit graph container ref
   const canvasContainerRef = useRef(null);
   const [showCoverScreen, setShowCoverScreen] = useState(true);
@@ -66,14 +69,18 @@ const Main = () => {
 
   useEffect(() => {
     if(currentRepo != "") {
-      const git: SimpleGit = simpleGit(currentRepo, { binary: 'git' });
+      //const git: SimpleGit = simpleGit(currentRepo, { binary: 'git' });
 
       // get current branch
       // git.status()
       //   .then((res:any) => {this.setState({current: res.current})});
 
-      git.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
-        .then((res:any) => {setCommits(res.all)});
+      setSgit((current) => {
+        let temp = simpleGit(currentRepo, { binary: 'git' })
+        temp.log({'--all': null, format: {commitHash: '%H', commitName: '%s', authorName: '%an', authorDate: '%ad', parentHashes: '%P', refNames: '%d'}})
+          .then((res:any) => {setCommits(res.all)});
+        return temp;
+      });
     }
   }, [currentRepo])
 
@@ -135,7 +142,7 @@ const Main = () => {
       case 1:
         return (<CommitHistoryScreen></CommitHistoryScreen>)
       case 2:
-        return (<FileDiffScreen></FileDiffScreen>)
+        return (<FileDiffScreen sgit={sgit}></FileDiffScreen>)
       case 3:
         return (<BranchesScreen></BranchesScreen>)
       case 4:
@@ -216,7 +223,7 @@ const Main = () => {
         </div>
 
         <div className="contentContainer">
-          <div ref={canvasContainerRef} className="commitGraphContainer">
+          <div ref={canvasContainerRef} className="content">
             {renderTab()}
           </div>
         </div>

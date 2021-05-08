@@ -63,6 +63,9 @@ body {
   margin: 0px;
   overflow: hidden;
 }
+h1 {
+  margin: 0px;
+}
 
 .frame-drag-area {
   -webkit-app-region: drag;
@@ -326,7 +329,7 @@ body {
   padding: 20px 20px 20px 10px;
 }
 
-.commitGraphContainer {
+.content {
   width: 100%;
   height: 100%;
   background-color: var(--content-bg-color);
