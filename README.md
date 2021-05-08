@@ -3,9 +3,6 @@
     <a href="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/test.yml">
         <img src="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/test.yml/badge.svg"></img>
     <a>
-    <a href="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml">
-        <img src="https://github.com/Oliver-Redeyoff/Gitty/actions/workflows/publish.yml/badge.svg"></img>
-    <a>
 </div>
 <br/>
 
