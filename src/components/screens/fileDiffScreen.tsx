@@ -1,34 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
+const githubCodeTheme = require('../tools/githubCodeTheme.json');
+
+import '../../styles/fileDiff.global.scss';
 
 interface DiffProps {
     sgit: any;
   }
 
-const fillDiffScreen = (props: DiffProps) => {
+const fileDiffScreen = (props: DiffProps) => {
 
-    //const [diffSummary, setDiffSummary] = useState(null);
     const [diffs, setDiffs] = useState([]);
 
     const diffSplitRegex = new RegExp("@@[^@]+@@")
 
     useEffect(() => {
+        getChanges();
+
+        var intervalId = window.setInterval(function(){
+            getChanges();
+        }, 1000);
+
+        return (() => {clearInterval(intervalId)})
+
+    }, []);
+
+    const getChanges = () => {
+        console.log('getting changes');
         if(props.sgit != null){
             props.sgit.diffSummary()
                 .then((res) => {
                     getDiffData(res).then((res2: any) => {setDiffs(res2)})
                 })
         }
-    }, []);
+    }
 
-    const getDiffData = (diffSummary) => {
+    const getDiffData = (diffSummary: any) => {
         return new Promise(async (resolve) => {
             let tempDiffs = []
 
             for (const file of diffSummary.files) {
                 let tempDiff = {name: file.file, changes: []}
-                //props.sgit.diff(file.file)
-                //    .then((res) => {tempDiff.changes = res.split(diffSplitRegex)})
 
                 let tempChanges = await props.sgit.diff(file.file);
 
@@ -42,19 +54,22 @@ const fillDiffScreen = (props: DiffProps) => {
         })
     }
 
+    const detectLanguage = (fileName: string) => {
+        return fileName.split('.').pop();
+    }
+
     return (
         <div style={{height: '100%', overflowY: 'scroll', padding: '20px'}}>
             <h1>Current changes</h1>
             <div style={{marginBottom: "50px"}}>
                 {diffs.map((diffgroup, groupIndex) => {
-                    console.log(diffgroup)
-                    return (<div key={groupIndex+1} style={{backgroundColor: "rgba(0, 0, 0, 0.2)", padding: "10px", marginTop: "20px", boxSizing: "border-box"}}>
+                    return (<div key={groupIndex+1} className="fileDiffConatiner">
                         <code>{diffgroup.name}</code>
-                        <span style={{float: "right", marginLeft: "15px", color: 'red'}}>Discard</span>
-                        <span style={{float: "right", color: 'green'}}>Commit</span>
+                        <div className="changeActionBtn discard" style={{float: 'right'}}><span>Discard</span></div>
+                        <div className="changeActionBtn commit" style={{float: 'right'}}><span>Stage</span></div>
                         {diffgroup.changes.map((diff, changeIndex) => {
-                            console.log(diff)
-                            return <SyntaxHighlighter key={(groupIndex+1)*(changeIndex+1)} language="javascript">{diff}</SyntaxHighlighter>
+                            let language = detectLanguage(diffgroup.name)
+                            return <SyntaxHighlighter key={(groupIndex+1)*(changeIndex+1)} language={language} style={githubCodeTheme}>{diff}</SyntaxHighlighter>
                         })}
                     </div>)
                 })}
@@ -63,4 +78,4 @@ const fillDiffScreen = (props: DiffProps) => {
     )
 }
 
-export default fillDiffScreen;
+export default fileDiffScreen;

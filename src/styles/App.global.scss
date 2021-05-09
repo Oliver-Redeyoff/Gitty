@@ -1,3 +1,5 @@
+@import '~tippy.js/dist/tippy.css';
+
 @keyframes spin {
   0% { transform: rotate(0deg) }
   100% { transform: rotate(360deg) }
@@ -75,6 +77,10 @@ h3 {
 }
 h4 {
   margin: 0px;
+}
+.tooltip {
+  background-color: black;
+  color: white;
 }
 
 .frame-drag-area {
@@ -218,6 +224,7 @@ h4 {
     }
     .fill {
       fill: var(--header-title-color) !important;
+      stroke: var(--header-title-color) !important;
     }
   }
 

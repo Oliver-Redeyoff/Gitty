@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 const remote = require("electron").remote;
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Tippy from '@tippy.js/react';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import simpleGit from 'simple-git';
 import './styles/App.global.scss';
 
@@ -203,29 +204,38 @@ const Main = () => {
 
       <div className="header">
         <h1 onClick={() => triggerNotification("Hello there")}>Gitty</h1>
-        <div className="headerIcon pushIcon" title="Push"><PushIcon></PushIcon></div>
-        <div className="headerIcon pullIcon" title="Pull"><PullIcon></PullIcon></div>
-        <div className="headerIcon fetchIcon" title="Fetch"><FetchIcon></FetchIcon></div>
+        
+        <Tippy content="Push" arrow={true}>
+          <div className="headerIcon pushIcon" title="Push"><PushIcon></PushIcon></div>
+        </Tippy>
+        <Tippy content="Pull" arrow={true}>
+          <div className="headerIcon pullIcon" title="Pull"><PullIcon></PullIcon></div>
+        </Tippy>
+        <Tippy content="Fetch" arrow={true}>
+          <div className="headerIcon fetchIcon" title="Fetch"><FetchIcon></FetchIcon></div>
+        </Tippy>
 
-        <div className="repoSelector" onClick={openRepoFinder}>
-          <div className="leftCol">
-            <FolderIcon></FolderIcon>
+        <Tippy content="Select repository" arrow={true}>
+          <div className="repoSelector" onClick={openRepoFinder}>
+            <div className="leftCol">
+              <FolderIcon></FolderIcon>
+            </div>
+            <div className="rightCol">
+              <h2>{getLastFolder(currentRepo)}</h2>
+            </div>
           </div>
-          <div className="rightCol">
-            <h2>{getLastFolder(currentRepo)}</h2>
-          </div>
-        </div>
+        </Tippy>
       </div>
 
       <div className="all">
         <div className="sidebarContainer">
           <div className="sidebar">
-            <div className={"sidebar-slot" + (tab==0 ? " active" : "")} onClick={() => setTab(0)}><GraphIcon></GraphIcon></div>
-            <div className={"sidebar-slot" + (tab==1 ? " active" : "")} onClick={() => setTab(1)}><HistoryIcon></HistoryIcon></div>
-            <div className={"sidebar-slot" + (tab==2 ? " active" : "")} onClick={() => setTab(2)}><DifferenceIcon></DifferenceIcon></div>
-            <div className={"sidebar-slot" + (tab==3 ? " active" : "")} onClick={() => setTab(3)}><BranchesIcon></BranchesIcon></div>
-            <div className={"sidebar-slot" + (tab==4 ? " active" : "")} onClick={() => setTab(4)}><TerminalIcon></TerminalIcon></div>
-            <div className={"sidebar-slot" + (tab==5 ? " active" : "")} onClick={() => setTab(5)}><SettingsIcon></SettingsIcon></div>
+            <Tippy content="Commit graph" arrow={true} placement="right"><div className={"sidebar-slot" + (tab==0 ? " active" : "")} onClick={() => setTab(0)}><GraphIcon></GraphIcon></div></Tippy>
+            <Tippy content="Commit history" arrow={true} placement="right"><div className={"sidebar-slot" + (tab==1 ? " active" : "")} onClick={() => setTab(1)}><HistoryIcon></HistoryIcon></div></Tippy>
+            <Tippy content="New changes" arrow={true} placement="right"><div className={"sidebar-slot" + (tab==2 ? " active" : "")} onClick={() => setTab(2)}><DifferenceIcon></DifferenceIcon></div></Tippy>
+            <Tippy content="Branches" arrow={true} placement="right"><div className={"sidebar-slot" + (tab==3 ? " active" : "")} onClick={() => setTab(3)}><BranchesIcon></BranchesIcon></div></Tippy>
+            <Tippy content="Terminal" arrow={true} placement="right"><div className={"sidebar-slot" + (tab==4 ? " active" : "")} onClick={() => setTab(4)}><TerminalIcon></TerminalIcon></div></Tippy>
+            <Tippy content="Settings" arrow={true} placement="right"><div className={"sidebar-slot" + (tab==5 ? " active" : "")} onClick={() => setTab(5)}><SettingsIcon></SettingsIcon></div></Tippy>
           </div>
         </div>
 

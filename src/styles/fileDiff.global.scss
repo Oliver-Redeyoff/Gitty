@@ -1,0 +1,35 @@
+.fileDiffConatiner {
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    margin-top: 20px;
+    box-sizing: border-box;
+
+    .changeActionBtn {
+        border-radius: 5px;
+        background-color: transparent;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 3px 10px;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &.discard {
+            border: 1px solid #810000;
+            color: #810000;
+        }
+        &.commit {
+            border: 1px solid #939b62;
+            color: #939b62;
+        }
+
+        &:hover {
+            &.discard {
+                background-color: rgba(#810000, 0.05);
+            }
+            &.commit {
+                background-color: rgba(#939b62, 0.2);
+            }
+        }
+    }
+}
